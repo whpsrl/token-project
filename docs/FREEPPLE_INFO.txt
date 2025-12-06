@@ -1,0 +1,293 @@
+================================================================================
+                              FREEPPLE (FRP)
+                    LA CRYPTO PER LE PERSONE, NON PER LE WHALE
+================================================================================
+
+                      "FREE THE PEOPLE. FREE THE FUTURE."
+
+================================================================================
+                              COS'È FREEPPLE?
+================================================================================
+
+Freepple è un token che nasce da un'idea semplice: creare una criptovaluta 
+che protegge le persone comuni e ha un VALORE REALE dietro.
+
+Il nome dice tutto:
+• FREE = Libertà vera
+• PEOPLE = Per le persone
+
+A differenza di altri token basati solo sulla speculazione, Freepple ha un 
+MOTORE PRODUTTIVO: un'attività di mining che genera €10.000 al mese, 
+interamente reinvestiti nella liquidità del token.
+
+================================================================================
+                           INFORMAZIONI TOKEN
+================================================================================
+
+Nome:               Freepple
+Simbolo:            FRP
+Supply Totale:      1.000.000.000 (1 miliardo)
+Blockchain:         Polygon
+Tipo:               ERC-20
+
+La supply è FISSA. Non verranno MAI creati nuovi token.
+
+================================================================================
+                              PRESALE
+================================================================================
+
+CONTRIBUTO
+• Minimo: €100
+• Massimo: €250
+• Tutti uguali: nessun pacchetto VIP
+
+PREZZO
+€0.001 per FRP
+
+COSA RICEVI (con bonus +20%)
+• €100 → 120.000 FRP
+• €150 → 180.000 FRP
+• €200 → 240.000 FRP
+• €250 → 300.000 FRP
+
+BONUS REFERRAL
+Per ogni amico che partecipa: +5% dei suoi token per te
+
+OBIETTIVO
+1.000 persone × €100-250 = €150.000 - €175.000
+
+================================================================================
+                         DISTRIBUZIONE TOKEN
+================================================================================
+
+PRESALE ....................... 20% ........ 200.000.000 FRP
+Per chi partecipa alla presale con €100-250.
+
+STAKING REWARDS ............... 18% ........ 180.000.000 FRP
+Ricompense per chi tiene e mette in staking i propri token.
+
+LIQUIDITY RESERVE ............. 13% ........ 130.000.000 FRP
+Per aggiungere liquidità nel tempo.
+
+REFERRAL PROGRAM .............. 12% ........ 120.000.000 FRP
+Per chi porta nuovi utenti nel progetto.
+
+TEAM .......................... 10% ........ 100.000.000 FRP
+BLOCCATO per 1 ANNO. Poi max 1% al mese. Sblocco totale: 9+ anni.
+
+AIRDROP ....................... 8% ......... 80.000.000 FRP
+Token gratuiti per chi si iscrive e completa le attività social.
+
+LIQUIDITÀ DEX ................. 7% ......... 70.000.000 FRP
+Pool di trading iniziale.
+
+MARKETING ..................... 7% ......... 70.000.000 FRP
+Per listing su exchange, partnership, promozione. Max 0.5%/mese.
+
+RESERVE ....................... 5% ......... 50.000.000 FRP
+Fondo di emergenza. Max 0.5%/mese.
+
+TOTALE ........................ 100% ....... 1.000.000.000 FRP
+
+================================================================================
+                              AL LANCIO
+================================================================================
+
+POOL LIQUIDITÀ
+€70.000 + 70.000.000 FRP
+
+PREZZO LANCIO
+€0.001 per FRP (stesso della presale)
+
+MAX ACQUISTO POST-LANCIO
+30.000 FRP = €30
+
+VANTAGGIO PRESALE
+Chi ha partecipato alla presale può avere fino a 300.000 FRP.
+Dopo il lancio, il massimo è 30.000 FRP.
+= 10 volte di più per chi ha creduto prima!
+
+================================================================================
+                    PROTEZIONI ANTI-WHALE E ANTI-DUMP
+================================================================================
+
+1. LIMITE ACQUISTO
+Dopo il lancio: massimo 30.000 FRP per wallet (€30).
+Vantaggio presale: 10x (300.000 vs 30.000 FRP).
+
+2. LIMITE VENDITA MENSILE
+Massimo 10% del proprio saldo al mese.
+Come uno "stipendio": puoi ritirare ogni mese, ma non scappare con tutto.
+
+3. TASSA SULLE VENDITE (decrescente)
+• Mesi 1-3: 10%
+• Mesi 4-12: 3%
+• Dopo 1 anno: 0.5%
+
+Dove va la tassa:
+• 40% → Ricompense staking
+• 30% → Bonus affiliati top (rank)
+• 20% → Sviluppo progetto
+• 10% → Bruciati (riduce supply)
+
+4. TEAM BLOCCATO
+I token del team sono BLOCCATI per 1 ANNO INTERO.
+Dopo, possono vendere solo l'1% al mese.
+Tempo totale per sbloccare tutto: OLTRE 9 ANNI.
+
+================================================================================
+              IL MOTORE: ATTIVITÀ PRODUTTIVA €10.000/MESE
+================================================================================
+
+Freepple non è solo speculazione. Ha un'ATTIVITÀ PRODUTTIVA REALE.
+
+INVESTIMENTO
+€30.000 in attività produttiva (dai fondi presale)
+
+RENDIMENTO
+• Mensile: €10.000
+• Annuale: €120.000
+
+DESTINAZIONE
+100% dei profitti → liquidità del token
+
+EFFETTO SULLA LIQUIDITÀ
+• Lancio: €70.000
+• Dopo 6 mesi: €130.000 (+€60.000)
+• Dopo 12 mesi: €190.000 (+€120.000)
+
+La liquidità CRESCE AUTOMATICAMENTE ogni mese, anche se nessuno compra!
+
+================================================================================
+                         PROIEZIONI DI CRESCITA
+================================================================================
+
+ANNO 1 - SCENARIO REALISTICO
+
+Mining aggiunto: +€120.000
+Nuovi acquisti: +€100.000 (stima)
+Liquidità totale: €290.000
+
+Prezzo: €0.001 → €0.004
+Crescita: +300%
+
+Chi ha messo €100 in presale (120.000 FRP): €480
+
+------------------------------------------------------------------------
+
+SCENARI A CONFRONTO
+
+                    LIQUIDITÀ    PREZZO      CRESCITA    €100 PRESALE
+Conservativo        €190.000     €0.0027     +170%       €324
+Realistico          €290.000     €0.0041     +310%       €492
+Ottimista           €490.000     €0.007      +600%       €840
+Esplosivo           €1.200.000   €0.017      +1.600%     €2.040
+
+================================================================================
+                         PROGRAMMA STAKING
+================================================================================
+
+Metti in staking i tuoi FRP e guadagna ricompense passive!
+
+Pool totale: 180.000.000 FRP
+APY stimato: 15-30%
+Durata: 3-5 anni
+Extra: +40% di tutte le tasse sulle vendite
+
+================================================================================
+                      PROGRAMMA AFFILIAZIONE
+================================================================================
+
+GUADAGNI DIRETTI (2 livelli)
+
+Livello 1: Guadagni il 3% di quello che comprano i tuoi referral diretti
+Livello 2: Guadagni l'1% di quello che comprano i referral dei tuoi referral
+
+SISTEMA RANK (Bonus extra dalle tasse di vendita)
+
+BRONZE      5 referral                    → 0.5% della pool mensile
+SILVER      20 referral + 50 livello 2    → 1.5% della pool mensile
+GOLD        50 referral + 150 livello 2   → 3% della pool mensile
+DIAMOND     150 referral + 500 livello 2  → 6% della pool mensile
+AMBASSADOR  500 referral + 2000 livello 2 → 12% della pool mensile
+
+================================================================================
+                           AIRDROP GRATUITO
+================================================================================
+
+Iscriviti e ricevi fino a 1.000 FRP GRATIS!
+
+Email verificata + Wallet collegato     = 500 FRP
+Segui @FreeppleToken su X               = +150 FRP
+Metti Like al post fissato              = +50 FRP
+Fai Retweet del post fissato            = +100 FRP
+Unisciti a Telegram + verifica bot      = +200 FRP
+────────────────────────────────────────────────────
+TOTALE POSSIBILE                        = 1.000 FRP
+
+I token dell'airdrop sono bloccati per 30 giorni.
+
+================================================================================
+                         DOVE VANNO I FONDI PRESALE
+================================================================================
+
+Con €150.000 raccolti:
+
+Liquidità Pool ................ 47% ........ €70.000
+Attività Produttiva ........... 20% ........ €30.000
+Marketing ..................... 13% ........ €20.000
+Development ................... 10% ........ €15.000
+Reserve ....................... 10% ........ €15.000
+
+================================================================================
+                        DOMANDE FREQUENTI
+================================================================================
+
+D: Perché €100 minimo in presale?
+R: Chiunque abbia un PC può rimediare €100. Volevamo un minimo accessibile
+   ma serio. €100-250 per tutti, nessun pacchetto da migliaia di euro.
+
+D: Perché posso comprare max 10.000 FRP dopo il lancio?
+R: Per distribuzione democratica. Servono almeno 10.000 persone per la
+   liquidità. Nessuna whale può accumulare troppo.
+
+D: Il team può scappare con i soldi?
+R: No. I token del team sono BLOCCATI per 1 anno. Poi solo 1% al mese.
+   Servono 9+ anni per sbloccare tutto. È nel codice, non una promessa.
+
+D: Come genera soldi l'attività produttiva?
+R: L'attività produttiva genera profitti costanti ogni mese. Questi profitti
+   (~€10.000/mese) vengono convertiti e aggiunti alla liquidità di FRP.
+
+D: E se l'attività produttiva smette di funzionare?
+R: L'attività ha rendimenti variabili, ma è un asset reale. Anche con 
+   rendimenti più bassi, genera comunque valore costante.
+
+D: Quanto può crescere il prezzo?
+R: Dipende dalla community. Con €120.000/anno dal mining + crescita organica,
+   lo scenario realistico è +300-400% nel primo anno.
+
+================================================================================
+                              CONTATTI
+================================================================================
+
+Sito Web:       [IN ARRIVO]
+Twitter/X:      @FreeppleToken
+Telegram:       [IN ARRIVO]
+
+================================================================================
+                              DISCLAIMER
+================================================================================
+
+Questo documento è a scopo informativo. Le criptovalute sono investimenti 
+ad alto rischio. Non investire mai più di quanto puoi permetterti di perdere.
+Le proiezioni sono stime, non garanzie. DYOR (Do Your Own Research).
+
+================================================================================
+
+                      FREE THE PEOPLE. FREE THE FUTURE.
+
+                              FREEPPLE (FRP)
+                      1.000.000.000 Token | Polygon
+
+================================================================================
