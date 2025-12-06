@@ -1,17 +1,46 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaCoins, FaCheckCircle, FaClock } from 'react-icons/fa'
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/api/auth'
+import { getUserPresaleStatus } from '@/lib/api/presale'
 
 export default function PresaleStatus() {
-  // TODO: Fetch from API/Contract
-  const presaleData = {
+  const [presaleData, setPresaleData] = useState({
     hasParticipated: false,
     contribution: 0,
     tokens: 0,
     bonus: 0,
-    status: 'not_participated' // not_participated, pending, confirmed
+    status: 'not_participated' as 'not_participated' | 'pending' | 'confirmed'
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadPresaleStatus()
+  }, [])
+
+  const loadPresaleStatus = async () => {
+    try {
+      const user = await getCurrentUser()
+      if (!user) return
+
+      const contribution = await getUserPresaleStatus(user.id)
+      if (contribution) {
+        setPresaleData({
+          hasParticipated: true,
+          contribution: contribution.amount_usdt,
+          tokens: contribution.amount_frp,
+          bonus: contribution.bonus_frp,
+          status: contribution.status
+        })
+      }
+    } catch (error) {
+      console.error('Error loading presale status:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

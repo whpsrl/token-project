@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAccount, useBalance, useContractWrite, useWaitForTransaction } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { parseEther, formatEther } from 'viem'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import toast from 'react-hot-toast'
+import { getCurrentUser } from '@/lib/api/auth'
+import { createPresaleContribution, confirmPresaleContribution, getPresaleStats } from '@/lib/api/presale'
 
 // TODO: Replace with actual contract ABI
 const PRESALE_ABI = [
@@ -20,8 +23,42 @@ const PRESALE_ABI = [
 
 export default function PresalePage() {
   const { address, isConnected } = useAccount()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [amount, setAmount] = useState('500')
-  const [referralCode, setReferralCode] = useState('')
+  const [referralCode, setReferralCode] = useState(searchParams.get('ref') || '')
+  const [presaleStats, setPresaleStats] = useState({ totalRaised: 0, participants: 0 })
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    loadUser()
+    loadPresaleStats()
+  }, [])
+
+  const loadUser = async () => {
+    try {
+      const currentUser = await getCurrentUser()
+      if (!currentUser) {
+        router.push('/auth/login?redirect=/presale')
+        return
+      }
+      setUser(currentUser)
+      if (!referralCode && currentUser.referred_by) {
+        setReferralCode(currentUser.referred_by)
+      }
+    } catch (error) {
+      router.push('/auth/login?redirect=/presale')
+    }
+  }
+
+  const loadPresaleStats = async () => {
+    try {
+      const stats = await getPresaleStats()
+      setPresaleStats(stats)
+    } catch (error) {
+      console.error('Error loading presale stats:', error)
+    }
+  }
 
   // Get USDT balance
   const { data: balance } = useBalance({
@@ -47,16 +84,39 @@ export default function PresalePage() {
     hash: data?.hash,
   })
 
-  const handleContribute = () => {
+  const handleContribute = async () => {
     if (!isConnected) {
       toast.error('Connetti il tuo wallet')
       return
     }
-    if (!amount || parseFloat(amount) < 500) {
-      toast.error('Importo minimo: €500')
+    if (!user) {
+      toast.error('Devi essere registrato')
+      router.push('/auth/login?redirect=/presale')
       return
     }
-    write?.()
+    if (!amount || parseFloat(amount) < 500 || parseFloat(amount) > 500) {
+      toast.error('Importo deve essere esattamente €500')
+      return
+    }
+    if (!address) {
+      toast.error('Wallet non connesso')
+      return
+    }
+
+    try {
+      // Crea record nel database
+      const contribution = await createPresaleContribution(
+        user.id,
+        address,
+        parseFloat(amount),
+        referralCode || undefined
+      )
+
+      // Poi esegui transazione blockchain
+      write?.()
+    } catch (error: any) {
+      toast.error(error.message || 'Errore nella creazione del contributo')
+    }
   }
 
   return (
@@ -206,16 +266,21 @@ export default function PresalePage() {
                   <div>
                     <div className="flex justify-between mb-2">
                       <span className="text-gray-400">Raccolto</span>
-                      <span className="text-white font-semibold">€0 / €150.000</span>
+                      <span className="text-white font-semibold">
+                        €{presaleStats.totalRaised.toLocaleString()} / €150.000
+                      </span>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-3">
-                      <div className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full" style={{ width: '0%' }} />
+                      <div
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all"
+                        style={{ width: `${Math.min((presaleStats.totalRaised / 150000) * 100, 100)}%` }}
+                      />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-black/30 rounded-lg p-4">
                       <div className="text-sm text-gray-400 mb-1">Partecipanti</div>
-                      <div className="text-2xl font-bold text-white">0</div>
+                      <div className="text-2xl font-bold text-white">{presaleStats.participants}</div>
                     </div>
                     <div className="bg-black/30 rounded-lg p-4">
                       <div className="text-sm text-gray-400 mb-1">Obiettivo</div>

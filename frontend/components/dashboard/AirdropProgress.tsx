@@ -1,20 +1,49 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaCheckCircle, FaCircle } from 'react-icons/fa'
-import { FaXTwitter, FaTelegram } from 'react-icons/fa6'
-
-const tasks = [
-  { id: 'email', label: 'Email verificata + Wallet', points: 500, completed: false },
-  { id: 'twitter', label: 'Segui @FreeppleToken su X', points: 150, completed: false },
-  { id: 'like', label: 'Like al post fissato', points: 50, completed: false },
-  { id: 'retweet', label: 'Retweet post fissato', points: 100, completed: false },
-  { id: 'telegram', label: 'Telegram + Verifica Bot', points: 200, completed: false },
-]
+import { getCurrentUser } from '@/lib/api/auth'
+import { getAirdropProgress, completeAirdropTask } from '@/lib/api/airdrop'
+import toast from 'react-hot-toast'
 
 export default function AirdropProgress() {
-  const totalPoints = tasks.reduce((sum, task) => sum + (task.completed ? task.points : 0), 0)
-  const maxPoints = 1000
+  const [tasks, setTasks] = useState<any[]>([])
+  const [totalPoints, setTotalPoints] = useState(0)
+  const [maxPoints] = useState(1000)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadAirdropProgress()
+  }, [])
+
+  const loadAirdropProgress = async () => {
+    try {
+      const user = await getCurrentUser()
+      if (!user) return
+
+      const progress = await getAirdropProgress(user.id)
+      setTasks(progress.tasks)
+      setTotalPoints(progress.totalPoints)
+    } catch (error) {
+      console.error('Error loading airdrop progress:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCompleteTask = async (taskType: string) => {
+    try {
+      const user = await getCurrentUser()
+      if (!user) return
+
+      await completeAirdropTask(user.id, taskType)
+      toast.success('Task completato!')
+      loadAirdropProgress()
+    } catch (error: any) {
+      toast.error(error.message || 'Errore nel completare il task')
+    }
+  }
 
   return (
     <motion.div
@@ -61,7 +90,10 @@ export default function AirdropProgress() {
             <div className="flex items-center gap-4">
               <span className="text-purple-400 font-semibold">+{task.points} FRP</span>
               {!task.completed && (
-                <button className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white text-sm font-semibold transition-colors">
+                <button
+                  onClick={() => handleCompleteTask(task.type)}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-white text-sm font-semibold transition-colors"
+                >
                   Completa
                 </button>
               )}

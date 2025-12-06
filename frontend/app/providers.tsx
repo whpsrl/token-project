@@ -1,40 +1,36 @@
 'use client'
 
-import { WagmiConfig, createConfig, configureChains } from 'wagmi'
-import { polygon, polygonMumbai } from 'wagmi/chains'
-import { publicProvider } from 'wagmi/providers/public'
+import { WagmiProvider, createConfig, http } from 'wagmi'
+import { polygon, polygonAmoy } from 'wagmi/chains'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const { chains, publicClient } = configureChains(
-  [polygon, polygonMumbai],
-  [publicProvider()]
-)
-
-const { connectors } = getDefaultWallets({
+const { wallets } = getDefaultWallets({
   appName: 'Freepple',
   projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || 'freepple',
-  chains
 })
 
 const config = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient
+  chains: [polygon, polygonAmoy],
+  transports: {
+    [polygon.id]: http(),
+    [polygonAmoy.id]: http(),
+  },
+  connectors: wallets.map((wallet) => wallet.connector),
 })
 
 const queryClient = new QueryClient()
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiConfig config={config}>
+    <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider>
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>
-    </WagmiConfig>
+    </WagmiProvider>
   )
 }
 

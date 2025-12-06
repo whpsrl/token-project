@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { FaCopy, FaShareAlt, FaUsers, FaCoins } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { getCurrentUser } from '@/lib/api/auth'
+import { getReferralStats } from '@/lib/api/referral'
 
 export default function ReferralSection() {
   const [referralCode, setReferralCode] = useState<string>('')
@@ -13,15 +15,33 @@ export default function ReferralSection() {
     level1: 0,
     level2: 0,
     totalEarned: 0,
-    rank: 'Bronze'
+    rank: 'none'
   })
 
   useEffect(() => {
-    // TODO: Fetch from API
-    const code = 'FRP-' + Math.random().toString(36).substr(2, 9).toUpperCase()
-    setReferralCode(code)
-    setReferralLink(`${window.location.origin}/presale?ref=${code}`)
+    loadReferralData()
   }, [])
+
+  const loadReferralData = async () => {
+    try {
+      const user = await getCurrentUser()
+      if (!user) return
+
+      setReferralCode(user.referral_code)
+      setReferralLink(`${window.location.origin}/auth/register?ref=${user.referral_code}`)
+
+      const referralStats = await getReferralStats(user.id)
+      setStats({
+        totalReferrals: referralStats.total,
+        level1: referralStats.level1,
+        level2: referralStats.level2,
+        totalEarned: referralStats.totalEarned,
+        rank: referralStats.rank
+      })
+    } catch (error) {
+      console.error('Error loading referral data:', error)
+    }
+  }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -116,7 +136,9 @@ export default function ReferralSection() {
         </div>
         <div className="bg-black/30 rounded-lg p-4">
           <div className="text-sm text-gray-400 mb-1">Rank</div>
-          <div className="text-2xl font-bold text-yellow-400">{stats.rank}</div>
+          <div className="text-2xl font-bold text-yellow-400">
+            {stats.rank === 'none' ? '-' : stats.rank.charAt(0).toUpperCase() + stats.rank.slice(1)}
+          </div>
         </div>
       </div>
 

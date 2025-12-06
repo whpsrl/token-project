@@ -1,15 +1,53 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { useRouter } from 'next/navigation'
 import DashboardStats from '@/components/dashboard/DashboardStats'
 import ReferralSection from '@/components/dashboard/ReferralSection'
 import PresaleStatus from '@/components/dashboard/PresaleStatus'
 import AirdropProgress from '@/components/dashboard/AirdropProgress'
 import Navbar from '@/components/layout/Navbar'
+import { getCurrentUser } from '@/lib/api/auth'
+import toast from 'react-hot-toast'
 
 export default function DashboardPage() {
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
+  const router = useRouter()
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth = async () => {
+    try {
+      const currentUser = await getCurrentUser()
+      if (!currentUser) {
+        router.push('/auth/login')
+        return
+      }
+      setUser(currentUser)
+    } catch (error) {
+      router.push('/auth/login')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
+        <div className="text-white">Caricamento...</div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null
+  }
 
   if (!isConnected) {
     return (
