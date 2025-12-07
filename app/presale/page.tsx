@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useBalance, useContractWrite, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useBalance, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { parseEther, formatEther } from 'viem'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -67,21 +67,19 @@ export default function PresalePage() {
   })
 
   // Presale contribution
-  const { write, data, isLoading } = useContractWrite({
-    address: process.env.NEXT_PUBLIC_PRESALE_CONTRACT as `0x${string}`,
-    abi: PRESALE_ABI,
-    functionName: 'contribute',
-    value: amount ? parseEther(amount) : undefined,
-    onSuccess: () => {
-      toast.success('Transazione inviata!')
-    },
-    onError: (error) => {
-      toast.error(error.message)
+  const { writeContract, data, isPending: isLoading } = useWriteContract({
+    mutation: {
+      onSuccess: (hash) => {
+        toast.success('Transazione inviata!')
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
     }
   })
 
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash: data?.hash,
+    hash: data,
   })
 
   const handleContribute = async () => {
@@ -113,7 +111,17 @@ export default function PresalePage() {
       )
 
       // Poi esegui transazione blockchain
-      write?.()
+      if (!process.env.NEXT_PUBLIC_PRESALE_CONTRACT) {
+        toast.error('Contratto presale non configurato')
+        return
+      }
+      
+      writeContract({
+        address: process.env.NEXT_PUBLIC_PRESALE_CONTRACT as `0x${string}`,
+        abi: PRESALE_ABI,
+        functionName: 'contribute',
+        value: parseEther(amount),
+      })
     } catch (error: any) {
       toast.error(error.message || 'Errore nella creazione del contributo')
     }
