@@ -90,6 +90,13 @@ export default function Hero() {
             </Link>
             
             <Link
+              href="/whitepaper"
+              className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full font-semibold text-white hover:bg-white/20 transition-colors"
+            >
+              Leggi Whitepaper
+            </Link>
+            
+            <Link
               href="/dashboard"
               className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full font-semibold text-white hover:bg-white/20 transition-colors"
             >

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { FaHome, FaChartLine, FaUsers } from 'react-icons/fa'
+import { FaHome, FaChartLine, FaUsers, FaFileAlt } from 'react-icons/fa'
 
 export default function Navbar() {
   return (
@@ -21,6 +21,10 @@ export default function Navbar() {
             <Link href="/" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
               <FaHome />
               Home
+            </Link>
+            <Link href="/whitepaper" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+              <FaFileAlt />
+              Whitepaper
             </Link>
             <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
               <FaChartLine />
