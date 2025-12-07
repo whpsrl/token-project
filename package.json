@@ -1,25 +1,52 @@
 {
   "name": "freepple-token",
   "version": "1.0.0",
-  "description": "Freepple (FRP) - Token ERC-20 su Base",
+  "description": "Freepple (FRP) - Token ERC-20 su Polygon con Frontend Next.js",
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:local": "hardhat run scripts/deploy.js --network localhost",
     "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia",
     "deploy:base": "hardhat run scripts/deploy.js --network base",
-    "verify": "hardhat verify --network base"
+    "verify": "hardhat verify --network base",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.1"
+    "@openzeppelin/contracts": "^5.0.1",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ethers": "^6.8.0",
+    "wagmi": "^2.19.5",
+    "@tanstack/react-query": "^5.0.0",
+    "viem": "^2.21.0",
+    "@rainbow-me/rainbowkit": "^2.0.0",
+    "framer-motion": "^10.16.0",
+    "react-icons": "^4.11.0",
+    "axios": "^1.6.0",
+    "react-hot-toast": "^2.4.1",
+    "recharts": "^2.10.0",
+    "@supabase/supabase-js": "^2.38.0",
+    "@supabase/auth-helpers-nextjs": "^0.8.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "hardhat": "^2.19.4",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.2.0",
+    "tailwindcss": "^3.3.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.50.0",
+    "eslint-config-next": "^14.0.0"
   },
-  "keywords": ["token", "erc20", "freepple", "frp", "base", "blockchain"],
+  "keywords": ["token", "erc20", "freepple", "frp", "polygon", "blockchain", "nextjs"],
   "author": "",
   "license": "MIT"
 }
-

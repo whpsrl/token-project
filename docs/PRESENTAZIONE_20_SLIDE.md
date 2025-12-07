@@ -527,3 +527,4 @@ ANNO 9+: Sblocco completo
 6. Aggiungi animazioni leggere (opzionale)
 7. Ogni slide deve respirare (spazio bianco)
 
+
