@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useBalance, useContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount, useBalance, useContractWrite, useWaitForTransactionReceipt } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { parseEther, formatEther } from 'viem'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -80,7 +80,7 @@ export default function PresalePage() {
     }
   })
 
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransaction({
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: data?.hash,
   })
 
