@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useAccount, useBalance, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { parseEther, formatEther } from 'viem'
@@ -21,7 +21,7 @@ const PRESALE_ABI = [
   }
 ]
 
-export default function PresalePage() {
+function PresaleContent() {
   const { address, isConnected } = useAccount()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -302,6 +302,21 @@ export default function PresalePage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function PresalePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-[80vh] px-4">
+          <div className="text-white">Caricamento...</div>
+        </div>
+      </div>
+    }>
+      <PresaleContent />
+    </Suspense>
   )
 }
 
