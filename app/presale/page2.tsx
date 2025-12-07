@@ -1,11 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
 export default function PresalePage() {
-  // Stats per social proof
+  const [email, setEmail] = useState('')
+  const [walletAddress, setWalletAddress] = useState('')
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  
+  // Fake stats per social proof
   const [stats, setStats] = useState({
     raised: 78500,
     participants: 157,
@@ -30,6 +35,15 @@ export default function PresalePage() {
     }, 1000)
     return () => clearInterval(interval)
   }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || !walletAddress || !acceptedTerms) return
+    
+    // Simulazione invio
+    setShowSuccess(true)
+    setTimeout(() => setShowSuccess(false), 5000)
+  }
 
   const progress = (stats.raised / 150000) * 100
 
@@ -198,7 +212,7 @@ export default function PresalePage() {
             </motion.div>
           </div>
 
-          {/* Right Column - CTA Card */}
+          {/* Right Column - Registration Form */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -215,57 +229,81 @@ export default function PresalePage() {
                 <div className="text-gray-400">Pagamento una tantum • No fees nascoste</div>
               </div>
 
-              {/* What You Get */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3 p-3 bg-black/30 rounded-xl">
-                  <span className="text-2xl">🎟️</span>
-                  <div className="flex-1">
-                    <div className="font-bold text-sm">600.000 FRP Token</div>
-                    <div className="text-xs text-gray-500">500K + 100K bonus</div>
-                  </div>
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tuo@email.com"
+                    required
+                    className="w-full px-4 py-3 bg-black/50 border border-violet-500/30 rounded-xl focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all"
+                  />
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-black/30 rounded-xl">
-                  <span className="text-2xl">👑</span>
-                  <div className="flex-1">
-                    <div className="font-bold text-sm">Status Fondatore</div>
-                    <div className="text-xs text-gray-500">Badge + governance</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-black/30 rounded-xl">
-                  <span className="text-2xl">💎</span>
-                  <div className="flex-1">
-                    <div className="font-bold text-sm">Prezzo Migliore</div>
-                    <div className="text-xs text-gray-500">€0.001 (listing €0.003-0.005)</div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Main CTA Button */}
-              <Link
-                href="/register"
-                className="block w-full py-5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 rounded-xl font-black text-lg text-center transition-all duration-300 shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-[1.02] active:scale-95"
-              >
-                Registrati Ora →
-              </Link>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Wallet Address (Polygon)
+                  </label>
+                  <input
+                    type="text"
+                    value={walletAddress}
+                    onChange={(e) => setWalletAddress(e.target.value)}
+                    placeholder="0x..."
+                    required
+                    className="w-full px-4 py-3 bg-black/50 border border-violet-500/30 rounded-xl focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all font-mono text-sm"
+                  />
+                  <p className="mt-2 text-xs text-gray-500">
+                    I token verranno inviati a questo indirizzo dopo il listing
+                  </p>
+                </div>
 
-              {/* Payment Info */}
-              <div className="mt-6 text-center space-y-2">
-                <div className="text-sm text-gray-400">
-                  Dopo la registrazione riceverai le istruzioni di pagamento
+                {/* Terms */}
+                <div className="flex items-start gap-3 p-4 bg-black/30 rounded-xl">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="mt-1 w-5 h-5 rounded border-violet-500/30 bg-black/50 focus:ring-2 focus:ring-violet-500/20"
+                    required
+                  />
+                  <label className="text-sm text-gray-400 leading-relaxed">
+                    Accetto i <Link href="/terms" className="text-violet-400 hover:underline">termini e condizioni</Link> e confermo di aver letto il <Link href="/whitepaper" className="text-violet-400 hover:underline">whitepaper</Link>. Sono consapevole dei rischi.
+                  </label>
                 </div>
-                <div className="flex justify-center gap-4 text-xs text-gray-500">
-                  <span>💳 Carta</span>
-                  <span>₿ Crypto</span>
-                  <span>🏦 Bonifico</span>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={!acceptedTerms || !email || !walletAddress}
+                  className="w-full py-5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed rounded-xl font-black text-lg transition-all duration-300 shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-[1.02] active:scale-95"
+                >
+                  Prenota il Tuo Posto →
+                </button>
+
+                {/* Payment Info */}
+                <div className="text-center space-y-2">
+                  <div className="text-sm text-gray-400">
+                    Dopo la registrazione riceverai le istruzioni di pagamento
+                  </div>
+                  <div className="flex justify-center gap-4 text-xs text-gray-500">
+                    <span>💳 Carta</span>
+                    <span>₿ Crypto</span>
+                    <span>🏦 Bonifico</span>
+                  </div>
                 </div>
-              </div>
+              </form>
 
               {/* Security Badge */}
               <div className="mt-6 pt-6 border-t border-white/10 flex items-center justify-center gap-3 text-sm text-gray-500">
                 <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>Registrazione Sicura • Dati Crittografati</span>
+                <span>Transazione Sicura • Dati Crittografati</span>
               </div>
             </div>
 
@@ -346,6 +384,45 @@ export default function PresalePage() {
           </p>
         </motion.div>
       </div>
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-6"
+            onClick={() => setShowSuccess(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-gradient-to-br from-green-950/90 to-emerald-900/80 border-2 border-green-500/50 rounded-3xl p-8 max-w-md text-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              
+              <h3 className="text-3xl font-black mb-3">Registrazione Completata!</h3>
+              <p className="text-gray-300 mb-6 leading-relaxed">
+                Controlla la tua email per le istruzioni di pagamento. Benvenuto tra i fondatori di Freepple! 🎉
+              </p>
+              
+              <button
+                onClick={() => setShowSuccess(false)}
+                className="px-8 py-3 bg-green-600 hover:bg-green-500 rounded-xl font-bold transition-all"
+              >
+                Chiudi
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
