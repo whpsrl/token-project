@@ -40,25 +40,53 @@ export async function updateReferralEarnings(referrerId: string, referredId: str
   const commission = level === 1 ? 0.03 : 0.01
   const earned = amount * commission
 
-  const { error } = await supabase
+  // Leggi il valore corrente del referral
+  const { data: referral, error: referralError } = await supabase
+    .from('referrals')
+    .select('total_earned')
+    .eq('referrer_id', referrerId)
+    .eq('referred_id', referredId)
+    .single()
+
+  if (referralError && referralError.code !== 'PGRST116') throw referralError
+
+  const currentEarned = referral?.total_earned || 0
+  const newTotalEarned = currentEarned + earned
+
+  // Aggiorna il referral
+  const { error: updateError } = await supabase
     .from('referrals')
     .update({
-      total_earned: supabase.raw(`total_earned + ${earned}`)
+      total_earned: newTotalEarned
     })
     .eq('referrer_id', referrerId)
     .eq('referred_id', referredId)
 
-  if (error) throw error
+  if (updateError) throw updateError
+
+  // Leggi il valore corrente del rank
+  const { data: rank, error: rankError } = await supabase
+    .from('user_ranks')
+    .select('total_earned')
+    .eq('user_id', referrerId)
+    .single()
+
+  if (rankError && rankError.code !== 'PGRST116') throw rankError
+
+  const currentRankEarned = rank?.total_earned || 0
+  const newRankTotalEarned = currentRankEarned + earned
 
   // Aggiorna anche rank earnings
-  await supabase
+  const { error: rankUpdateError } = await supabase
     .from('user_ranks')
     .upsert({
       user_id: referrerId,
-      total_earned: supabase.raw(`total_earned + ${earned}`)
+      total_earned: newRankTotalEarned
     }, {
       onConflict: 'user_id'
     })
+
+  if (rankUpdateError) throw rankUpdateError
 }
 
 
