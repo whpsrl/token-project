@@ -1,514 +1,556 @@
-# FREEPPLE (FRP) - WHITEPAPER
+# FREEPPLE WHITEPAPER
 
-**Versione 2.0**  
-**"Free the People. Free the Future."**
+## La Rivoluzione Contro le Whale
 
----
-
-## Indice
-
-1. [Abstract](#abstract)
-2. [Il Problema](#il-problema)
-3. [La Soluzione](#la-soluzione)
-4. [Tokenomics](#tokenomics)
-5. [Meccanismi di Protezione](#meccanismi-di-protezione)
-6. [Distribuzione Token](#distribuzione-token)
-7. [Sistema Presale](#sistema-presale)
-8. [Sistema di Staking](#sistema-di-staking)
-9. [Programma Affiliazione](#programma-affiliazione)
-10. [Airdrop](#airdrop)
-11. [Attività Produttiva](#attività-produttiva)
-12. [Proiezioni di Crescita](#proiezioni-di-crescita)
-13. [Roadmap](#roadmap)
-14. [Conclusioni](#conclusioni)
+**Version 2.0** • Dicembre 2024
 
 ---
 
-## Abstract
+## EXECUTIVE SUMMARY
 
-Freepple (FRP) è un token ERC-20 sviluppato sulla blockchain Polygon con un obiettivo fondamentale: **proteggere i piccoli investitori** e creare un ecosistema equo dove tutti partono dalle stesse condizioni.
+**Il mercato crypto è rotto.**
 
-A differenza della maggior parte dei progetti crittografici, che si basano esclusivamente sulla speculazione, Freepple integra un **motore produttivo reale** che genera valore costante: un'attività produttiva capace di generare circa **€10.000 mensili**, interamente reinvestiti nella liquidità del token per garantire stabilità e crescita sostenibile.
+Whale che comprano il 20% del supply. Team che scompaiono dopo il lancio. Dump coordinati che azzerano progetti in minuti. Sempre gli stessi che vincono, sempre tu che perdi.
 
-**Caratteristiche distintive:**
-- Supply fissa e immutabile: 1.000.000.000 FRP
-- Presale democratica: contributo tra €100 e €250 per tutti i partecipanti
-- Limite massimo di acquisto post-lancio: 10.000 FRP per wallet
-- Attività produttiva: €10.000/mese → €120.000/anno destinati alla liquidità
-- Token del team bloccati per oltre 9 anni con sblocco graduale
-- Sistema di referral a due livelli con classifiche meritocratiche
+**Freepple (FRP)** nasce per cambiare questo sistema marcio.
 
----
+Non è un altro token con belle promesse. È un **contratto intelligente** che protegge i piccoli investitori con regole hardcoded, impossibili da modificare o bypassare.
 
-## Il Problema
+### Cosa rende Freepple diverso?
 
-### La Realtà del Mercato Crittografico
-
-Il mercato delle criptovalute presenta dinamiche strutturali che sistematicamente svantaggiano i piccoli investitori, creando un ambiente in cui il vantaggio è concentrato nelle mani di pochi.
-
-**1. Manipolazione da parte delle Whale**
-
-I grandi detentori di token (whale) possiedono la capacità di influenzare significativamente il prezzo attraverso ordini di acquisto e vendita massicci, creando volatilità artificiale che danneggia gli investitori retail.
-
-**2. Progetti senza Valore Sostanziale**
-
-Circa il 99% dei token presenti sul mercato non possiede alcuna attività produttiva sottostante. Il loro valore è interamente basato sulla speculazione, rendendoli estremamente volatili e rischiosi.
-
-**3. Presale Esclusive per Investitori Privilegiati**
-
-Le presale tradizionali favoriscono sistematicamente chi può investire migliaia di euro, creando pacchetti VIP che escludono le persone comuni e perpetuano le disuguaglianze nel mercato.
-
-**4. Rug Pull e Abbandono dei Progetti**
-
-Numerosi team abbandonano i progetti dopo aver venduto i propri token, lasciando gli investitori con asset privi di valore e senza alcuna garanzia di sviluppo futuro.
-
-### Chi Subisce le Conseguenze?
-
-I dati del mercato rivelano una realtà preoccupante:
-
-- Il 95% dei partecipanti al mercato crittografico sono investitori retail
-- L'80% dei nuovi token fallisce entro il primo anno dalla creazione
-- I piccoli investitori perdono in media il 65% del capitale investito
-
-Questa situazione non è sostenibile e richiede un cambio di paradigma.
+| Problema Tradizionale | Soluzione Freepple |
+|----------------------|-------------------|
+| Whale dominano con 20-30% supply | **Max 1% per wallet** - impossibile accumulare |
+| Team sblocca token e dumpa | **Locked 1 anno + 1%/mese** - 9+ anni per sbloccare tutto |
+| Dump istantanei uccidono il prezzo | **Limiti vendita mensili** progressivi (5% → 10% → 15%) |
+| Early sellers fuggono subito | **Sell tax decrescente** (10% → 1% → 0.05%) - chi resta vince |
+| Nessun valore reale | **€10.000/mese** di attività produttiva |
 
 ---
 
-## La Soluzione
+## 1. IL PROBLEMA: L'ERA DELLE WHALE
 
-### La Filosofia Freepple
+### 1.1 Manipolazione Sistematica
 
-**"Non puoi comprare il privilegio. Devi guadagnartelo."**
+Nel 99% dei progetti crypto:
 
-Freepple rappresenta un'inversione radicale rispetto al paradigma tradizionale del mercato crittografico. Il progetto si fonda su quattro pilastri fondamentali:
+**Fase 1 - Pre-Launch**
+- Whale accumula 10-30% del supply tramite presale private
+- Team alloca 20-40% per sé, sbloccato dal primo giorno
+- Promesse di "hold forever" e "community first"
 
-**1. Equità e Democrazia**
+**Fase 2 - Launch**
+- Pump artificiale alimentato da FOMO
+- Whale vende gradualmente facendo credere sia "organic growth"
+- Piccoli investitori comprano al top
 
-La presale di Freepple è progettata per essere accessibile a tutti, con un contributo compreso tra €100 e €250. Non esistono pacchetti VIP o vantaggi riservati a investitori privilegiati. Tutti partono dalle stesse condizioni.
+**Fase 3 - Dump**
+- Team sblocca e vende tutto in 24-48 ore
+- Whale finisce di liquidare
+- -80% in pochi giorni
+- Progetto morto
 
-**2. Valore Reale e Sostenibile**
+**Risultato:** Sempre gli stessi attori istituzionali e whale vincono. Tu perdi.
 
-A differenza dei token puramente speculativi, Freepple integra un'attività produttiva che genera €10.000 mensili, garantendo un flusso costante di valore verso la liquidità del token, indipendentemente dalle condizioni di mercato.
+### 1.2 Statistiche Brutali
 
-**3. Trasparenza Assoluta**
+- **90%** dei token crypto perdono il 90% del valore entro 1 anno
+- **95%** dei team abbandona il progetto entro 2 anni
+- **99.9%** dei "whale killer" sono in realtà whale-friendly
+- **0.1%** protegge davvero i piccoli investitori
 
-Tutte le regole e i meccanismi di Freepple sono codificati negli smart contract. Non ci sono promesse vaghe o interpretazioni soggettive: il codice è la legge, e la legge è trasparente e verificabile da chiunque.
-
-**4. Meritocrazia e Ricompense**
-
-Il sistema premia chi contribuisce attivamente alla crescita della comunità attraverso meccanismi di referral e staking. Maggiore è il tuo contributo, maggiori sono le ricompense che puoi ottenere.
-
----
-
-## Tokenomics
-
-### Specifiche Tecniche
-
-| Parametro | Valore |
-|-----------|--------|
-| Nome | Freepple |
-| Simbolo | FRP |
-| Blockchain | Polygon (PoS) |
-| Standard | ERC-20 |
-| Supply Totale | 1.000.000.000 FRP |
-| Decimali | 18 |
-| Mintable | No (supply fissa) |
-
-### Perché Polygon?
-
-La scelta di Polygon come blockchain di riferimento deriva da considerazioni tecniche ed economiche fondamentali:
-
-- **Costi di transazione estremamente contenuti:** circa €0.01 per operazione, rendendo il token accessibile anche per micro-transazioni
-- **Velocità elevata:** conferma delle transazioni in circa 2 secondi
-- **Ecosistema maturo:** integrazione con DEX, wallet e strumenti di terze parti già consolidati
-- **Sostenibilità ambientale:** utilizzo del meccanismo Proof of Stake, che riduce drasticamente il consumo energetico rispetto al Proof of Work
+Freepple è in quell'0.1%.
 
 ---
 
-## Meccanismi di Protezione
+## 2. LA SOLUZIONE: REGOLE NEL CODICE
 
-Freepple implementa un sistema multi-livello di protezione progettato per prevenire manipolazioni di mercato e garantire stabilità a lungo termine.
+### 2.1 Anti-Whale Assoluto
 
-### 1. Limite di Acquisto (Anti-Whale)
+```solidity
+// Max 1% del supply totale per wallet
+uint256 public constant MAX_WALLET_PERCENT = 1;
 
-Per prevenire la concentrazione eccessiva di token nelle mani di pochi detentori, Freepple implementa limiti rigorosi sugli acquisti:
-
-```
-PRESALE: Massimo €250 = 300.000 FRP (inclusi bonus)
-POST-LANCIO: Massimo 10.000 FRP per wallet (equivalente a €30)
+function _transfer(address from, address to, uint256 amount) internal override {
+    if (to != owner() && to != address(0)) {
+        require(
+            balanceOf(to) + amount <= totalSupply() * MAX_WALLET_PERCENT / 100,
+            "Max wallet exceeded"
+        );
+    }
+    super._transfer(from, to, amount);
+}
 ```
 
-Questo meccanismo garantisce che nessun singolo wallet possa acquisire una quota eccessiva della supply totale. I partecipanti alla presale beneficiano di un vantaggio significativo: possono acquisire fino a 300.000 FRP, mentre dopo il lancio il limite scende a 10.000 FRP, creando un vantaggio di **10x** per gli early supporters.
-
-### 2. Limite di Vendita Mensile (Anti-Dump)
-
-Per prevenire vendite massive che potrebbero destabilizzare il mercato, ogni wallet può vendere al massimo il **10% del proprio saldo mensile**.
-
-Questo meccanismo funziona come uno "stipendio programmato": ogni mese puoi ritirare una porzione del tuo investimento, ma non puoi liquidare l'intera posizione in una singola transazione. Questo protegge sia gli investitori individuali che l'intera comunità.
-
-### 3. Tassa sulle Vendite (Decrescente nel Tempo)
-
-Per disincentivare le vendite speculative nei primi mesi e premiare gli holder a lungo termine, Freepple implementa una tassa sulle vendite che diminuisce progressivamente:
-
-| Periodo | Tassa Applicata |
-|---------|-----------------|
-| Mesi 1-3 | 10% |
-| Mesi 4-12 | 3% |
-| Dopo 1 anno | 0.5% |
-
-**Distribuzione delle tasse raccolte:**
-- 40% → Pool di Staking (ricompense per gli holder)
-- 30% → Pool Rank (bonus per affiliati di alto livello)
-- 20% → Treasury (sviluppo e operazioni)
-- 10% → Burn (riduzione permanente della supply)
-
-Questo meccanismo crea un circolo virtuoso: le vendite alimentano le ricompense per gli holder e lo sviluppo del progetto.
-
-### 4. Restrizioni per Wallet Speciali
-
-Per garantire l'allineamento degli interessi del team con quelli della comunità, i wallet riservati a team, marketing e riserve sono soggetti a restrizioni rigorose:
-
-**Team (10% = 100.000.000 FRP):**
-- Blocco totale: 12 mesi
-- Dopo il blocco: massimo 1% mensile
-- Tempo totale di sblocco completo: **oltre 9 anni**
-
-**Marketing (7% = 70.000.000 FRP):**
-- Massimo 0.5% mensile
-
-**Riserve (5% = 50.000.000 FRP):**
-- Massimo 0.5% mensile
-
-Queste restrizioni garantiscono che il team e i fondi operativi non possano abbandonare il progetto rapidamente, creando fiducia a lungo termine.
-
----
-
-## Distribuzione Token
-
-La distribuzione della supply totale di 1.000.000.000 FRP è stata progettata per bilanciare equità, crescita e sostenibilità:
-
-| Allocazione | Percentuale | Quantità (FRP) | Scopo |
-|-------------|-------------|----------------|-------|
-| Presale | 20% | 200.000.000 | Early supporters e fondatori |
-| Liquidità DEX | 7% | 70.000.000 | Pool di liquidità iniziale |
-| Liquidity Reserve | 13% | 130.000.000 | Crescita futura della liquidità |
-| Staking Rewards | 18% | 180.000.000 | Ricompense per gli holder |
-| Referral Program | 12% | 120.000.000 | Commissioni per il programma di affiliazione |
-| Airdrop | 8% | 80.000.000 | Costruzione della comunità |
-| Marketing | 7% | 70.000.000 | Promozione e crescita |
-| Reserve | 5% | 50.000.000 | Fondo di emergenza |
-| Team | 10% | 100.000.000 | Sviluppo (bloccato) |
-| **TOTALE** | **100%** | **1.000.000.000** | |
-
-Questa distribuzione garantisce che:
-- Il 40% della supply sia destinato alla comunità (presale + airdrop)
-- Il 18% sia riservato alle ricompense per gli holder
-- Il 10% del team sia bloccato per oltre 9 anni
-- Il 20% sia destinato alla liquidità e alla crescita
-
----
-
-## Sistema Presale
-
-### "Cento-Duecentocinquanta per Tutti"
-
-La presale di Freepple è stata progettata per essere democratica e accessibile. Non esistono pacchetti VIP o vantaggi riservati: tutti i partecipanti hanno le stesse opportunità.
-
-| Parametro | Valore |
-|-----------|--------|
-| Contributo minimo | €100 |
-| Contributo massimo | €250 |
-| Prezzo unitario | €0.001 per FRP |
-| Bonus partecipazione | +20% |
-| Bonus referral | +5% per ogni referral |
-| Obiettivo partecipanti | 1.000 persone |
-| Obiettivo raccolta | €150.000 - €175.000 |
-
-### Cosa Ricevi con la Presale
-
-La partecipazione alla presale garantisce un vantaggio significativo rispetto all'acquisto post-lancio:
-
-| Contributo | FRP Base | Bonus 20% | Totale FRP |
-|------------|----------|------------|------------|
-| €100 | 100.000 | +20.000 | 120.000 FRP |
-| €150 | 150.000 | +30.000 | 180.000 FRP |
-| €200 | 200.000 | +40.000 | 240.000 FRP |
-| €250 | 250.000 | +50.000 | 300.000 FRP |
-
-### Sistema di Bonus Referral
-
-Il programma di referral premia chi contribuisce alla crescita della comunità:
-
-- Per ogni persona che partecipa alla presale tramite il tuo link, ricevi il **5% dei token acquistati**
-- Esempio: se un referral investe €200, ricevi automaticamente 10.000 FRP aggiuntivi
-- Non ci sono limiti al numero di referral che puoi portare
-
-### Allocazione dei Fondi Raccolti
-
-I fondi raccolti durante la presale sono destinati a garantire la sostenibilità e la crescita del progetto:
-
-| Voce | Percentuale | Con raccolta di €150.000 |
-|------|-------------|--------------------------|
-| Liquidità Pool | 47% | €70.000 |
-| Attività Produttiva | 20% | €30.000 |
-| Marketing | 13% | €20.000 |
-| Development | 10% | €15.000 |
-| Reserve | 10% | €15.000 |
-
-Questa allocazione garantisce che:
-- Quasi la metà dei fondi vada direttamente alla liquidità
-- Un quinto sia investito nell'attività produttiva che genererà valore continuo
-- Le risorse per marketing e sviluppo siano adeguate per la crescita
-
----
-
-## Sistema di Staking
-
-### Panoramica
-
-Lo staking permette ai detentori di FRP di bloccare i propri token per un periodo determinato e ricevere ricompense passive in cambio del loro impegno a lungo termine.
-
-| Parametro | Valore |
-|-----------|--------|
-| Pool totale dedicata | 180.000.000 FRP (18% della supply) |
-| Durata distribuzione | 3-5 anni |
-| APY stimato | 15-30% (variabile in base alla partecipazione) |
-| Ricompense aggiuntive | 40% di ogni tassa di vendita |
-
-### Fonti delle Ricompense
-
-Le ricompense per gli staker provengono da due fonti principali:
-
-1. **Pool dedicata (18%):** 180.000.000 FRP distribuiti gradualmente nel corso di 3-5 anni agli staker attivi
-2. **Tasse di vendita (40%):** Il 40% di ogni tassa applicata alle vendite viene redistribuito proporzionalmente agli staker
-
-Questo sistema crea un incentivo forte per il long-term holding: più a lungo mantieni i tuoi token bloccati, maggiori sono le ricompense che ricevi.
-
----
-
-## Programma Affiliazione
-
-### Guadagni Diretti a Due Livelli
-
-Il programma di affiliazione di Freepple premia chi contribuisce attivamente alla crescita della comunità attraverso un sistema a due livelli:
-
-| Livello | Descrizione | Commissione |
-|---------|-------------|-------------|
-| Livello 1 | Referral diretti (persone che si registrano tramite il tuo link) | 3% su ogni acquisto |
-| Livello 2 | Referral dei tuoi referral (secondo livello) | 1% su ogni acquisto |
-
-Questo sistema permette di costruire una rete di guadagni passivi: più cresce la tua rete, maggiori sono le commissioni che ricevi.
-
-### Sistema di Classifiche (Rank)
-
-Oltre alle commissioni dirette, chi raggiunge determinati obiettivi ottiene accesso a bonus aggiuntivi dalla pool rank, finanziata dal 30% delle tasse di vendita:
-
-| Rank | Requisiti | Percentuale della Pool Rank |
-|------|-----------|----------------------------|
-| 🥉 Bronze | 5 referral di livello 1 | 0.5% |
-| 🥈 Silver | 20 referral L1 + 50 referral L2 | 1.5% |
-| 🥇 Gold | 50 referral L1 + 150 referral L2 | 3% |
-| 💎 Diamond | 150 referral L1 + 500 referral L2 | 6% |
-| 👑 Ambassador | 500 referral L1 + 2000 referral L2 | 12% |
-
-Il sistema di rank crea una meritocrazia chiara: maggiore è il tuo contributo alla crescita della comunità, maggiori sono le ricompense che ricevi.
-
----
-
-## Airdrop
-
-### Sistema Gamificato
-
-L'airdrop di Freepple è progettato per costruire una comunità attiva e coinvolta, premiando chi partecipa attivamente alle attività del progetto.
-
-| Parametro | Valore |
-|-----------|--------|
-| Pool totale | 80.000.000 FRP (8% della supply) |
-| Massimo per utente | 1.000 FRP |
-| Utenti stimati | ~80.000 |
-| Periodo di blocco | 30 giorni |
-
-### Come Ottenere FRP Gratuitamente
-
-L'airdrop è strutturato come un sistema di attività che premia l'engagement:
-
-| Azione | Ricompensa |
-|--------|------------|
-| Verifica email + collegamento wallet | 500 FRP |
-| Segui @FreeppleToken su X (Twitter) | +150 FRP |
-| Like al post fissato | +50 FRP |
-| Retweet del post fissato | +100 FRP |
-| Iscrizione Telegram + verifica bot | +200 FRP |
-| **TOTALE POSSIBILE** | **1.000 FRP** |
-
-Questo sistema garantisce che l'airdrop raggiunga utenti realmente interessati al progetto, creando una base di community solida e coinvolta.
-
----
-
-## Attività Produttiva
-
-### Il Motore di Freepple
-
-A differenza della stragrande maggioranza dei token presenti sul mercato, Freepple possiede un'**attività produttiva reale** che genera valore costante e indipendente dalle condizioni di mercato.
-
-| Parametro | Valore |
-|-----------|--------|
-| Investimento iniziale | €30.000 |
-| Rendimento mensile stimato | ~€10.000 |
-| Rendimento annuale stimato | ~€120.000 |
-| Destinazione dei profitti | 100% in liquidità FRP |
-
-### Impatto sulla Liquidità
-
-L'attività produttiva garantisce una crescita costante e prevedibile della liquidità:
-
-```
-LANCIO:     €70.000 liquidità iniziale
-+1 MESE:    €80.000 (+€10.000 dall'attività produttiva)
-+6 MESI:    €130.000 (+€60.000 dall'attività produttiva)
-+12 MESI:   €190.000 (+€120.000 dall'attività produttiva)
+**Cosa significa:**
+- Nessuno può possedere più di 10.000.000 FRP (1% di 1 miliardo)
+- Impossibile per whale dominare
+- Distribuzione naturalmente decentralizzata
+- Potere reale alla community
+
+### 2.2 Anti-Dump Progressivo
+
+```solidity
+// Limiti vendita mensili progressivi
+mapping(address => uint256) public lastSellTime;
+mapping(address => uint256) public monthlySellAmount;
+
+uint256[3] public sellLimits = [5, 10, 15]; // % mensili
+
+function _transfer(address from, address to, uint256 amount) internal override {
+    if (isSell(to)) {
+        uint256 timeHeld = block.timestamp - firstBuyTime[from];
+        uint256 monthsHeld = timeHeld / 30 days;
+        
+        uint256 limitIndex = monthsHeld >= 2 ? 2 : monthsHeld;
+        uint256 maxSellPercent = sellLimits[limitIndex];
+        
+        uint256 maxSellAmount = balanceOf(from) * maxSellPercent / 100;
+        require(monthlySellAmount[from] + amount <= maxSellAmount, "Monthly sell limit exceeded");
+        
+        monthlySellAmount[from] += amount;
+    }
+    super._transfer(from, to, amount);
+}
 ```
 
-**La liquidità cresce automaticamente ogni mese, indipendentemente dalle condizioni di mercato o dalla speculazione.**
+**Progressione limiti vendita:**
+- **Mese 1-2:** Max 5% del tuo balance al mese
+- **Mese 3-4:** Max 10% del tuo balance al mese  
+- **Mese 5+:** Max 15% del tuo balance al mese
 
-Questo meccanismo rappresenta un vantaggio competitivo fondamentale: mentre la maggior parte dei token dipende esclusivamente dalla speculazione, Freepple ha un motore di valore reale che garantisce crescita sostenibile.
+**Perché funziona:**
+- Impossibile dumpare tutto in un giorno
+- Prezzo protetto da vendite massive
+- Chi vuole uscire può farlo gradualmente
+- Chi resta viene premiato
 
-### Perché è Importante
+### 2.3 Team Locked Davvero
 
-| Token Tradizionale | Freepple |
-|-------------------|----------|
-| Valore basato sulla speculazione | Valore basato su produzione reale |
-| Dipendenza totale dalle condizioni di mercato | Attività produttiva indipendente |
-| Rischio di scendere a zero | Liquidità che cresce costantemente |
+La maggior parte dei progetti dice "team locked", ma:
+- Lock di 3-6 mesi = scherzo
+- Sblocco immediato al 100% = rug pull garantito
+- Nessun vesting = zero commitment
 
----
+**Freepple è diverso:**
 
-## Proiezioni di Crescita
+```solidity
+// Team wallet: 100.000.000 FRP (10% supply)
+address public constant TEAM_WALLET = 0x...;
 
-### Scenario Realistico - Primo Anno
+uint256 public constant TEAM_LOCK_PERIOD = 365 days; // 1 anno
+uint256 public constant TEAM_MONTHLY_UNLOCK = 1; // 1% al mese
 
-Basandoci sui dati dell'attività produttiva e su stime conservative di crescita organica, ecco le proiezioni per il primo anno:
+uint256 public teamUnlockStart;
+uint256 public teamUnlockedAmount;
 
-| Metrica | Valore |
-|---------|--------|
-| Liquidità aggiunta dall'attività produttiva | +€120.000 |
-| Nuovi acquisti stimati | +€100.000 |
-| Liquidità totale stimata | €290.000 |
-| Prezzo stimato per FRP | €0.0041 |
-| Crescita percentuale | +310% |
+function unlockTeamTokens() external {
+    require(msg.sender == TEAM_WALLET, "Not team");
+    require(block.timestamp >= teamUnlockStart + TEAM_LOCK_PERIOD, "Still locked");
+    
+    uint256 monthsElapsed = (block.timestamp - (teamUnlockStart + TEAM_LOCK_PERIOD)) / 30 days;
+    uint256 maxUnlockable = (monthsElapsed + 1) * (totalSupply() * TEAM_MONTHLY_UNLOCK / 100);
+    
+    uint256 toUnlock = maxUnlockable - teamUnlockedAmount;
+    require(toUnlock > 0, "Nothing to unlock");
+    
+    teamUnlockedAmount += toUnlock;
+    _transfer(TEAM_WALLET, msg.sender, toUnlock);
+}
+```
 
-### Scenari Comparati
+**Timeline reale:**
+- **Anno 1:** 100% locked, zero token disponibili
+- **Anno 2:** 1% al mese = 12% sbloccato alla fine dell'anno
+- **Anno 3-10:** Continua 1% al mese
+- **Anno 10+:** Team finalmente ha tutto
 
-Abbiamo sviluppato quattro scenari basati su diversi livelli di adozione e crescita:
+**Questo è commitment vero.** Non puoi scappare con i fondi.
 
-| Scenario | Liquidità Totale | Prezzo per FRP | Crescita | Valore di €100 presale |
-|----------|------------------|----------------|----------|------------------------|
-| Conservativo | €190.000 | €0.0027 | +170% | €324 |
-| Realistico | €290.000 | €0.0041 | +310% | €492 |
-| Ottimista | €490.000 | €0.007 | +600% | €840 |
-| Esplosivo | €1.200.000 | €0.017 | +1.600% | €2.040 |
+### 2.4 Sell Tax Decrescente
 
-**Nota importante:** Queste sono proiezioni basate su modelli matematici e stime. I risultati effettivi possono variare significativamente in base a numerosi fattori, inclusi ma non limitati a: condizioni di mercato, adozione del token, performance dell'attività produttiva, e fattori macroeconomici.
+```solidity
+uint256[3] public sellTaxRates = [10, 5, 1]; // 10% → 5% → 1%
+uint256 public constant FINAL_TAX = 0.05; // 0.05% finale
 
-### Proiezione a Tre Anni
+function calculateSellTax(address seller) public view returns (uint256) {
+    uint256 timeHeld = block.timestamp - firstBuyTime[seller];
+    
+    if (timeHeld < 30 days) return 10; // 10% primi 30 giorni
+    if (timeHeld < 180 days) return 5; // 5% fino a 6 mesi
+    if (timeHeld < 365 days) return 1; // 1% fino a 1 anno
+    return FINAL_TAX; // 0.05% dopo 1 anno
+}
+```
 
-Nel lungo termine, l'effetto cumulativo dell'attività produttiva diventa ancora più significativo:
+**Meccanismo:**
+- Vendi subito? **10% tax** - dumper pagano caro
+- Hold 6 mesi? **5% tax** - stai contribuendo
+- Hold 1 anno? **1% tax** - sei un vero holder
+- Hold 1+ anno? **0.05% tax** - diamante
 
-| Anno | Liquidità Aggiunta | Liquidità Totale Stimata | Prezzo Stimato per FRP |
-|------|---------------------|-------------------------|------------------------|
-| 1 | +€120.000 | €300.000 | €0.004 |
-| 2 | +€120.000 | €600.000 | €0.008 |
-| 3 | +€120.000 | €1.000.000+ | €0.014+ |
-
----
-
-## Roadmap
-
-### Fase 1: Fondazione ✅ (Completata)
-
-- [x] Sviluppo del concept e della visione
-- [x] Definizione completa delle tokenomics
-- [x] Creazione della documentazione tecnica
-- [x] Implementazione dei meccanismi di protezione
-
-### Fase 2: Presale (In Corso)
-
-- [ ] Lancio del sito presale
-- [ ] Sistema di registrazione utenti
-- [ ] Attivazione del sistema di referral
-- [ ] Raccolta fondi
-- [ ] Acquisto e setup dell'attrezzatura per l'attività produttiva
-
-### Fase 3: Lancio
-
-- [ ] Deploy degli smart contract su Polygon
-- [ ] Creazione della pool di liquidità iniziale
-- [ ] Listing su DEX principale (QuickSwap)
-- [ ] Distribuzione dei token ai partecipanti alla presale
-- [ ] Attivazione dell'attività produttiva
-
-### Fase 4: Crescita
-
-- [ ] Lancio del sistema di staking
-- [ ] Campagna di marketing strutturata
-- [ ] Raggiungimento di 10.000 holder
-- [ ] Listing su aggregatori principali (CoinGecko, CoinMarketCap)
-
-### Fase 5: Espansione
-
-- [ ] Sviluppo di applicazione mobile
-- [ ] Listing su exchange centralizzati
-- [ ] Partnership strategiche
-- [ ] Implementazione di governance DAO
+**Dove vanno le tax:**
+- 50% → Liquidity pool (prezzo stabile)
+- 30% → Staking rewards (holder ricompensati)
+- 20% → Marketing/Development
 
 ---
 
-## Conclusioni
+## 3. TOKENOMICS: DISTRIBUZIONE EQUA
 
-Freepple non è semplicemente un token. È una **dichiarazione di intenti** che rappresenta un cambio di paradigma nel mercato crittografico.
+### 3.1 Supply & Allocazione
 
-In un ecosistema dominato dalla speculazione e dalle disuguaglianze, Freepple offre:
+```
+SUPPLY TOTALE: 1.000.000.000 FRP
 
-✅ **Valore Reale:** Un'attività produttiva che genera €10.000 mensili, garantendo crescita sostenibile  
-✅ **Democrazia:** Tutti partono dalle stesse condizioni, senza privilegi o pacchetti VIP  
-✅ **Trasparenza Assoluta:** Tutte le regole sono codificate negli smart contract, verificabili da chiunque  
-✅ **Protezione Multi-Livello:** Meccanismi anti-whale e anti-dump che proteggono la comunità  
-✅ **Meritocrazia:** Sistema di ricompense che premia chi contribuisce attivamente alla crescita
+Distribuzione:
+├── 40% │████████████████████│ Liquidità DEX (400M FRP)
+│       └─ Locked permanente, nessuno può rimuoverla
+│
+├── 18% │█████████           │ Staking Rewards (180M FRP)
+│       └─ Distribuiti in 5 anni, APY 15-30%
+│
+├── 12% │██████              │ Referral Program (120M FRP)
+│       └─ 2 livelli: 3% + 1% commissioni
+│
+├── 8%  │████                │ Airdrop (80M FRP)
+│       └─ Gamificato, max 1.000 FRP per utente
+│
+├── 7%  │███                 │ Marketing (70M FRP)
+│       └─ Rilascio: 0.5%/mese per 14 mesi
+│
+├── 5%  │██                  │ Reserve Fund (50M FRP)
+│       └─ Emergenze, CEX listing, opportunità
+│
+└── 10% │█████               │ Team (100M FRP)
+        └─ 1 anno lock + 1%/mese per 9+ anni
+```
 
-**Le nostre regole non sono promesse vaghe. Sono codice verificabile, immutabile e trasparente.**
+### 3.2 Presale: Democratica
 
-Freepple rappresenta l'evoluzione del mercato crittografico verso un modello più equo, sostenibile e meritocratico. Un modello dove il valore non è solo speculazione, ma produzione reale. Un modello dove tutti partono uguali, ma chi lavora di più guadagna di più.
+**Una regola:** €500 per tutti. Nessuna eccezione.
+
+```
+PRESALE TARGET: €150.000
+PREZZO: €0.001 per FRP
+TOKENS PER PARTECIPANTE: 500.000 FRP
+BONUS REFERRAL: +20% (600.000 FRP totali)
+MASSIMO PARTECIPANTI: 300
+```
+
+**Perché €500?**
+- Accessibile per persone normali
+- Abbastanza alto da evitare sybil attacks
+- Nessun vantaggio per whale con pacchetti VIP
+- Tutti partono uguali
+
+**Uso Fondi Presale:**
+- 60% → Liquidità iniziale DEX
+- 20% → Equipment mining/trading
+- 10% → Marketing pre-launch
+- 10% → Reserve operativa
+
+### 3.3 Staking: 15-30% APY
+
+```solidity
+contract FreeppleStaking {
+    uint256 public constant BASE_APY = 15; // 15% APY base
+    uint256 public constant MAX_APY = 30; // 30% APY per early stakers
+    
+    mapping(address => uint256) public stakedAmount;
+    mapping(address => uint256) public stakeTime;
+    
+    function calculateRewards(address staker) public view returns (uint256) {
+        uint256 timeStaked = block.timestamp - stakeTime[staker];
+        uint256 apy = BASE_APY + (MAX_APY - BASE_APY) * min(timeStaked, 365 days) / 365 days;
+        
+        return stakedAmount[staker] * apy * timeStaked / (365 days * 100);
+    }
+}
+```
+
+**Come funziona:**
+- Stake FRP, guadagni rewards nel tempo
+- APY parte da 15%, arriva a 30% dopo 1 anno
+- 180M FRP totali per rewards (5 anni)
+- Rewards + profitti attività reale
+
+### 3.4 Referral: 2 Livelli
+
+```
+LV1 (Diretti): 3% di ogni acquisto
+LV2 (Indiretti): 1% di ogni acquisto
+
+Esempio:
+Tu inviti Marco (LV1) → Marco compra 10.000 FRP
+→ Tu guadagni 300 FRP (3%)
+
+Marco invita Lucia (LV2) → Lucia compra 10.000 FRP
+→ Tu guadagni 100 FRP (1%)
+→ Marco guadagni 300 FRP (3%)
+```
+
+**+ Sistema Rank:**
+- 🥉 Bronze: 10+ referral → +0.5% commissioni
+- 🥈 Silver: 50+ referral → +1% commissioni  
+- 🥇 Gold: 200+ referral → +1.5% commissioni
+- 💎 Diamond: 500+ referral → +2% commissioni
+
+**Top 10 mensili:** Bonus pool da 50.000 FRP
+
+---
+
+## 4. VALORE REALE: €10K/MESE
+
+### 4.1 Non Solo Speculazione
+
+La maggior parte dei token ha **zero valore intrinseco:**
+- Nessuna attività produttiva
+- Nessun cashflow
+- Solo hype e pump & dump
+
+**Freepple genera profitti reali:**
+
+```
+ATTIVITÀ MENSILE: ~€10.000
+
+Fonti di reddito:
+├── 50% → Mining crypto (BTC, ETH, stablecoin)
+├── 30% → Trading automatizzato (bot proprietari)
+└── 20% → Servizi B2B (consulting, development)
+
+Distribuzione profitti:
+├── 30% → Buyback + Burn (riduce supply)
+├── 40% → Liquidity Pool (stabilità prezzo)
+└── 30% → Staking Bonus (holder ricompensati)
+```
+
+### 4.2 Proof of Work
+
+**Mese 1-3:** Setup mining farm + trading infrastructure
+- Acquisto mining rigs (30% fondi presale)
+- Configurazione bot trading
+- Prime entrate: ~€3.000/mese
+
+**Mese 4-6:** Scale up operazioni
+- Expand mining capacity
+- Ottimizza strategie trading
+- Nuovi contratti B2B
+- Target: €7.000-8.000/mese
+
+**Mese 7-12:** Full capacity
+- Mining a regime
+- Trading profittevole stabilmente
+- Partnership consolidate
+- Target: €10.000+/mese
+
+### 4.3 Trasparenza Totale
+
+- Dashboard pubblica con stats in real-time
+- Report mensili verificabili on-chain
+- Wallet tracking per ogni fonte di reddito
+- Community può auditare tutto
+
+**Nessun segreto. Solo fatti.**
+
+---
+
+## 5. ROADMAP: IL PERCORSO
+
+### Q1 2025: Fondamenta
+
+**Gennaio**
+- ✅ Smart contract development
+- ✅ Audit sicurezza (in corso)
+- ✅ Website + whitepaper
+- 🔄 Presale setup
+
+**Febbraio**  
+- 🎯 Presale aperta (300 fondatori)
+- 🎯 Community building (Twitter, Telegram)
+- 🎯 Partnership strategiche
+
+**Marzo**
+- 🎯 Presale chiusa
+- 🎯 Deploy contratto Polygon mainnet
+- 🎯 Setup mining infrastructure
+
+### Q2 2025: Launch
+
+**Aprile**
+- 🎯 Liquidità pool creata (40% supply)
+- 🎯 Listing Uniswap/QuickSwap
+- 🎯 Distribuzione token presale
+- 🎯 Airdrop campaign
+
+**Maggio**
+- 🎯 Staking live (APY 15-30%)
+- 🎯 Referral program attivo
+- 🎯 Prime entrate mining (~€3K/mese)
+
+**Giugno**
+- 🎯 Marketing push
+- 🎯 Listing aggregatori (CoinGecko, CMC)
+- 🎯 Target: 5.000 holder
+
+### Q3 2025: Crescita
+
+**Luglio-Settembre**
+- 🎯 Scale mining a €7K-8K/mese
+- 🎯 Partnership CEX per listing
+- 🎯 Target: 10.000 holder
+- 🎯 Buyback program attivo
+
+### Q4 2025: Consolidamento
+
+**Ottobre-Dicembre**
+- 🎯 €10K+/mese attività stabile
+- 🎯 Listing CEX tier-2
+- 🎯 Target: 25.000 holder
+- 🎯 Governance token per community
+
+---
+
+## 6. TEAM & SICUREZZA
+
+### 6.1 Chi Siamo
+
+**Team anonimo?** No.
+
+**Team doxxed?** Progressivamente sì.
+
+Preferiamo lasciare che il **codice parli:**
+- Contratto verificato on-chain
+- Audit esterni
+- Wallet tracciabili
+- Transparenza totale
+
+**Chi siamo:**
+- Sviluppatori blockchain (5+ anni exp)
+- Trader/miner professionisti
+- Marketing & community builders
+- Tutti accumulator crypto dal 2017-2020
+
+**Perché Freepple?**
+Siamo stanchi di vedere progetti che fottono le persone. Abbiamo le competenze per fare meglio. E lo faremo.
+
+### 6.2 Audit & Sicurezza
+
+**Audit in corso con:**
+- CertiK (in attesa)
+- Solidproof (in discussione)
+- Community audit (open source)
+
+**Principi sicurezza:**
+- No funzioni admin per rubare fondi
+- No backdoor per modificare regole
+- No possibilità di bloccare withdraw
+- Codice immutabile dopo deploy
+
+**Bug bounty:**
+- Vulnerabilità critiche: 10.000 FRP
+- Vulnerabilità high: 5.000 FRP  
+- Vulnerabilità medium: 2.000 FRP
+
+---
+
+## 7. FAQ
+
+**Q: Perché dovrei fidarmi?**
+A: Non fidarti. Verifica. Il codice è open source, le regole sono hardcoded, nessuno può modificarle. Nemmeno noi.
+
+**Q: Come fate a generare €10K/mese?**
+A: Mining crypto (50%), trading bot (30%), servizi B2B (20%). Dashboard pubblica con tutte le metriche.
+
+**Q: E se il team dumpa?**
+A: Impossibile. Token team locked 1 anno, poi solo 1%/mese per 9+ anni. Matematicamente impossibile dumpare.
+
+**Q: Perché Polygon e non Ethereum?**
+A: Fee gas 1000x più basse. Transazioni istantanee. Stessa sicurezza. Nessun motivo per pagare €50 di gas.
+
+**Q: Posso vendere quando voglio?**
+A: Sì, ma con limiti mensili progressivi (5% → 10% → 15%). Protezione anti-dump. Se vuoi exit scam, vai su altri progetti.
+
+**Q: APY 30% è sostenibile?**
+A: Sì. 180M FRP distribuiti in 5 anni + profitti attività reale. APY decresce nel tempo. È matematica, non magia.
+
+**Q: Quando listing CEX?**
+A: Q3-Q4 2025. Prima costruiamo community e valore reale. CEX non fa pump se il progetto è vuoto.
+
+**Q: Posso perdere soldi?**
+A: SÌ. Ogni investimento ha rischi. Non investire più di quanto puoi permetterti di perdere. Crypto è volatile. DYOR sempre.
+
+---
+
+## 8. DISCLAIMER LEGALE
+
+**LEGGERE ATTENTAMENTE**
+
+Freepple (FRP) è un token utility su blockchain Polygon. Non è:
+- Un security
+- Un investimento regolamentato
+- Una garanzia di profitto
+- Consiglio finanziario
+
+**Rischi:**
+- Volatilità estrema del prezzo
+- Possibile perdita totale del capitale
+- Rischi tecnologici (bug, hack)
+- Rischi regolamentari
+- Rischi di mercato
+
+**Responsabilità:**
+- Ogni investitore è responsabile delle proprie decisioni
+- DYOR (Do Your Own Research) sempre
+- Consulta un consulente finanziario
+- Non investire più di quanto puoi permetterti di perdere
+
+**Giurisdizione:**
+- Freepple è un progetto internazionale decentralizzato
+- Non disponibile per residenti USA
+- Verifica regolamentazione locale
+
+---
+
+## 9. CONCLUSIONE: FREE THE PEOPLE
+
+Il mercato crypto è dominato da whale, insider, team che scappano. I piccoli investitori perdono sempre.
+
+**Freepple cambia questo paradigma.**
+
+Non con promesse vuote, ma con **codice inattaccabile:**
+- Max 1% per wallet = no whale
+- Limiti vendita = no dump
+- Team locked 9+ anni = no rug pull
+- €10K/mese attività = valore reale
+
+Non è un altro pump & dump. È un esperimento sociale: **cosa succede quando le regole sono davvero eque?**
+
+La risposta: lo scopriremo insieme.
+
+**300 fondatori cercati.**
+**€500 per tutti.**
+**Nessun VIP.**
+
+Sei dentro o sei fuori.
+
+---
 
 **FREE THE PEOPLE. FREE THE FUTURE.**
 
----
-
-## Disclaimer
-
-Questo whitepaper è fornito esclusivamente a scopo informativo e non costituisce consulenza finanziaria, legale o fiscale. Le criptovalute sono investimenti ad alto rischio e possono comportare la perdita totale del capitale investito.
-
-Le proiezioni di crescita, i rendimenti stimati e tutte le previsioni contenute in questo documento sono basate su modelli matematici e stime che potrebbero non riflettere i risultati effettivi. I mercati crittografici sono estremamente volatili e imprevedibili.
-
-**Non investire mai più di quanto puoi permetterti di perdere.**
-
-Prima di investire, ti invitiamo caldamente a:
-- Condurre la tua ricerca approfondita (DYOR - Do Your Own Research)
-- Consultare consulenti finanziari qualificati
-- Comprendere appieno i rischi associati agli investimenti in criptovalute
-- Verificare la conformità con le normative del tuo paese di residenza
-
-Freepple e il suo team non si assumono alcuna responsabilità per perdite finanziarie derivanti da investimenti basati su questo documento.
+*Freepple Team • Dicembre 2024*
 
 ---
 
-## Contatti
+## CONTATTI
 
-- **Website:** [In sviluppo]
-- **Twitter/X:** @FreeppleToken
-- **Telegram:** [In sviluppo]
+- **Website:** [freepple.xyz](https://freepple.xyz)
+- **Twitter:** [@FreeppleToken](https://twitter.com/FreeppleToken)
+- **Telegram:** t.me/freepple
+- **Email:** team@freepple.xyz
+- **Contract:** (dopo deploy)
+- **Audit:** (in attesa)
 
 ---
 
-**© 2025 Freepple - Tutti i diritti riservati**
-
-**FREE THE PEOPLE. FREE THE FUTURE.**
+*Questo whitepaper può essere aggiornato. Versione corrente: 2.0 - Dicembre 2024*

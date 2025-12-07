@@ -1,322 +1,428 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useAccount, useBalance, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { parseEther, formatEther } from 'viem'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Navbar from '@/components/layout/Navbar'
-import toast from 'react-hot-toast'
-import { getCurrentUser } from '@/lib/api/auth'
-import { createPresaleContribution, confirmPresaleContribution, getPresaleStats } from '@/lib/api/presale'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 
-// TODO: Replace with actual contract ABI
-const PRESALE_ABI = [
-  {
-    name: 'contribute',
-    type: 'function',
-    stateMutability: 'payable',
-    inputs: [],
-    outputs: []
-  }
-]
+export default function PresalePage() {
+  const [email, setEmail] = useState('')
+  const [walletAddress, setWalletAddress] = useState('')
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  
+  // Fake stats per social proof
+  const [stats, setStats] = useState({
+    raised: 78500,
+    participants: 157,
+    timeLeft: {
+      days: 15,
+      hours: 8,
+      minutes: 34,
+      seconds: 22
+    }
+  })
 
-function PresaleContent() {
-  const { address, isConnected } = useAccount()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [amount, setAmount] = useState('500')
-  const [referralCode, setReferralCode] = useState(searchParams.get('ref') || '')
-  const [presaleStats, setPresaleStats] = useState({ totalRaised: 0, participants: 0 })
-  const [user, setUser] = useState<any>(null)
-
+  // Countdown animato
   useEffect(() => {
-    loadUser()
-    loadPresaleStats()
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        ...prev,
+        timeLeft: {
+          ...prev.timeLeft,
+          seconds: prev.timeLeft.seconds > 0 ? prev.timeLeft.seconds - 1 : 59
+        }
+      }))
+    }, 1000)
+    return () => clearInterval(interval)
   }, [])
 
-  const loadUser = async () => {
-    try {
-      const currentUser = await getCurrentUser()
-      if (!currentUser) {
-        router.push('/auth/login?redirect=/presale')
-        return
-      }
-      setUser(currentUser)
-      if (!referralCode && currentUser.referred_by) {
-        setReferralCode(currentUser.referred_by)
-      }
-    } catch (error) {
-      router.push('/auth/login?redirect=/presale')
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || !walletAddress || !acceptedTerms) return
+    
+    // Simulazione invio
+    setShowSuccess(true)
+    setTimeout(() => setShowSuccess(false), 5000)
   }
 
-  const loadPresaleStats = async () => {
-    try {
-      const stats = await getPresaleStats()
-      setPresaleStats(stats)
-    } catch (error) {
-      console.error('Error loading presale stats:', error)
-    }
-  }
-
-  // Get USDT balance
-  const { data: balance } = useBalance({
-    address,
-    token: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F' // USDT on Polygon
-  })
-
-  // Presale contribution
-  const { writeContract, data, isPending: isLoading } = useWriteContract({
-    mutation: {
-      onSuccess: (hash) => {
-        toast.success('Transazione inviata!')
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      }
-    }
-  })
-
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash: data,
-  })
-
-  const handleContribute = async () => {
-    if (!isConnected) {
-      toast.error('Connetti il tuo wallet')
-      return
-    }
-    if (!user) {
-      toast.error('Devi essere registrato')
-      router.push('/auth/login?redirect=/presale')
-      return
-    }
-    if (!amount || parseFloat(amount) < 500 || parseFloat(amount) > 500) {
-      toast.error('Importo deve essere esattamente €500')
-      return
-    }
-    if (!address) {
-      toast.error('Wallet non connesso')
-      return
-    }
-
-    try {
-      // Crea record nel database
-      const contribution = await createPresaleContribution(
-        user.id,
-        address,
-        parseFloat(amount),
-        referralCode || undefined
-      )
-
-      // Poi esegui transazione blockchain
-      if (!process.env.NEXT_PUBLIC_PRESALE_CONTRACT) {
-        toast.error('Contratto presale non configurato')
-        return
-      }
-      
-      writeContract({
-        address: process.env.NEXT_PUBLIC_PRESALE_CONTRACT as `0x${string}`,
-        abi: PRESALE_ABI,
-        functionName: 'contribute',
-        value: parseEther(amount),
-      })
-    } catch (error: any) {
-      toast.error(error.message || 'Errore nella creazione del contributo')
-    }
-  }
+  const progress = (stats.raised / 150000) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900">
-      <Navbar />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
-            Presale Freepple
-          </h1>
-          <p className="text-xl text-gray-400">
-            €500 per tutti. Diventa fondatore.
-          </p>
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5" />
+      </div>
+
+      {/* Header */}
+      <header className="relative z-10 border-b border-white/5 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <Link href="/" className="text-2xl font-black">FREEPPLE</Link>
+          <div className="flex gap-4">
+            <Link href="/whitepaper" className="text-sm text-gray-400 hover:text-white transition-colors">Whitepaper</Link>
+            <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white transition-colors">Dashboard</Link>
+          </div>
+        </div>
+      </header>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Left Column - Info & Social Proof */}
+          <div className="space-y-8">
+            {/* Status Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20"
+            >
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-green-400">Presale Live • Posti Limitati</span>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight">
+                Diventa<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">
+                  Fondatore
+                </span>
+              </h1>
+              <p className="text-xl text-gray-400 leading-relaxed">
+                €500 per tutti. Nessun VIP, nessun pacchetto speciale.<br />
+                Solo <span className="text-violet-400 font-bold">200-300 posti</span> disponibili.
+              </p>
+            </motion.div>
+
+            {/* Countdown */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-gradient-to-br from-violet-950/50 to-fuchsia-950/30 border border-violet-500/20 rounded-2xl p-8"
+            >
+              <div className="text-center mb-6">
+                <div className="text-sm text-gray-400 mb-2">Presale termina tra:</div>
+                <div className="flex justify-center gap-4">
+                  {Object.entries(stats.timeLeft).map(([unit, value]) => (
+                    <div key={unit} className="text-center">
+                      <div className="bg-black/50 border border-violet-500/30 rounded-xl px-4 py-3 min-w-[70px]">
+                        <div className="text-3xl font-black text-violet-400">{String(value).padStart(2, '0')}</div>
+                      </div>
+                      <div className="text-xs text-gray-500 mt-2 capitalize">{unit}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-400">Raccolto</span>
+                  <span className="font-bold text-violet-400">€{stats.raised.toLocaleString()} / €150.000</span>
+                </div>
+                <div className="h-3 bg-black/50 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500"
+                  />
+                </div>
+                <div className="text-xs text-gray-500 text-center">
+                  {stats.participants}/300 fondatori • {(300 - stats.participants)} posti rimasti
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Benefits List */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="space-y-4"
+            >
+              <h3 className="text-2xl font-bold mb-4">Cosa Ricevi:</h3>
+              
+              {[
+                { icon: '🎟️', title: '600.000 FRP Token', desc: '500K base + 100K bonus early bird (+20%)' },
+                { icon: '👑', title: 'Status Fondatore', desc: 'Badge speciale + accesso esclusivo governance' },
+                { icon: '💎', title: 'Prezzo Migliore', desc: '€0.001 per FRP (listing a €0.003-0.005)' },
+                { icon: '🎁', title: 'Bonus Referral', desc: '+3% su ogni amico invitato (fino a +30%)' },
+              ].map((benefit, i) => (
+                <div key={i} className="flex gap-4 items-start p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-all">
+                  <div className="text-3xl">{benefit.icon}</div>
+                  <div>
+                    <div className="font-bold text-lg">{benefit.title}</div>
+                    <div className="text-sm text-gray-400">{benefit.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Social Proof */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-gradient-to-br from-green-950/30 to-emerald-900/20 border border-green-500/20 rounded-2xl p-6"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex -space-x-3">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 border-2 border-black" />
+                  ))}
+                </div>
+                <div className="text-sm text-gray-400">+157 fondatori hanno già partecipato</div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="text-sm text-gray-300 italic">
+                  "Finalmente un progetto che protegge davvero i piccoli investitori. In 1 ora già 50 posti venduti!"
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>Marco R. • Fondatore #42</span>
+                  <span>2 ore fa</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Trust Indicators */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="grid grid-cols-3 gap-4"
+            >
+              {[
+                { icon: '🔒', text: 'Smart Contract Verificato' },
+                { icon: '✅', text: 'Audit in Corso' },
+                { icon: '💯', text: 'Team Doxxed' },
+              ].map((item, i) => (
+                <div key={i} className="text-center p-4 bg-white/5 rounded-xl">
+                  <div className="text-3xl mb-2">{item.icon}</div>
+                  <div className="text-xs text-gray-400">{item.text}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right Column - Registration Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="lg:sticky lg:top-24 h-fit"
+          >
+            <div className="bg-gradient-to-br from-violet-950/50 to-fuchsia-950/30 border-2 border-violet-500/30 rounded-3xl p-8 shadow-2xl shadow-violet-500/20">
+              {/* Price Header */}
+              <div className="text-center mb-8">
+                <div className="inline-block px-4 py-2 bg-violet-500/20 rounded-full mb-4">
+                  <span className="text-sm font-medium text-violet-300">Investimento Unico</span>
+                </div>
+                <div className="text-6xl font-black mb-2">€500</div>
+                <div className="text-gray-400">Pagamento una tantum • No fees nascoste</div>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tuo@email.com"
+                    required
+                    className="w-full px-4 py-3 bg-black/50 border border-violet-500/30 rounded-xl focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Wallet Address (Polygon)
+                  </label>
+                  <input
+                    type="text"
+                    value={walletAddress}
+                    onChange={(e) => setWalletAddress(e.target.value)}
+                    placeholder="0x..."
+                    required
+                    className="w-full px-4 py-3 bg-black/50 border border-violet-500/30 rounded-xl focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition-all font-mono text-sm"
+                  />
+                  <p className="mt-2 text-xs text-gray-500">
+                    I token verranno inviati a questo indirizzo dopo il listing
+                  </p>
+                </div>
+
+                {/* Terms */}
+                <div className="flex items-start gap-3 p-4 bg-black/30 rounded-xl">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="mt-1 w-5 h-5 rounded border-violet-500/30 bg-black/50 focus:ring-2 focus:ring-violet-500/20"
+                    required
+                  />
+                  <label className="text-sm text-gray-400 leading-relaxed">
+                    Accetto i <Link href="/terms" className="text-violet-400 hover:underline">termini e condizioni</Link> e confermo di aver letto il <Link href="/whitepaper" className="text-violet-400 hover:underline">whitepaper</Link>. Sono consapevole dei rischi.
+                  </label>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={!acceptedTerms || !email || !walletAddress}
+                  className="w-full py-5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed rounded-xl font-black text-lg transition-all duration-300 shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-[1.02] active:scale-95"
+                >
+                  Prenota il Tuo Posto →
+                </button>
+
+                {/* Payment Info */}
+                <div className="text-center space-y-2">
+                  <div className="text-sm text-gray-400">
+                    Dopo la registrazione riceverai le istruzioni di pagamento
+                  </div>
+                  <div className="flex justify-center gap-4 text-xs text-gray-500">
+                    <span>💳 Carta</span>
+                    <span>₿ Crypto</span>
+                    <span>🏦 Bonifico</span>
+                  </div>
+                </div>
+              </form>
+
+              {/* Security Badge */}
+              <div className="mt-6 pt-6 border-t border-white/10 flex items-center justify-center gap-3 text-sm text-gray-500">
+                <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Transazione Sicura • Dati Crittografati</span>
+              </div>
+            </div>
+
+            {/* Urgency Message */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className="mt-6 p-4 bg-red-950/30 border border-red-500/30 rounded-xl text-center"
+            >
+              <div className="text-sm text-red-400 font-medium">
+                ⚠️ Solo {300 - stats.participants} posti rimasti
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                Ultimi 143 posti in 48 ore • Media 3 fondatori/ora
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {!isConnected ? (
-          <div className="bg-gray-800/50 rounded-2xl p-12 text-center border border-gray-700">
-            <p className="text-gray-400 mb-6">Connetti il tuo wallet per partecipare</p>
-            <ConnectButton />
+        {/* FAQ Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mt-24 max-w-4xl mx-auto"
+        >
+          <h2 className="text-4xl font-black text-center mb-12">Domande Frequenti</h2>
+          
+          <div className="space-y-4">
+            {[
+              {
+                q: 'Quando riceverò i token?',
+                a: 'I token verranno distribuiti entro 48 ore dal listing DEX, previsto per Marzo 2025. Riceverai email di conferma con tutti i dettagli.'
+              },
+              {
+                q: 'Posso investire più di €500?',
+                a: 'No. La presale è limitata a €500 per persona per garantire distribuzione equa. Nessun vantaggio per whale.'
+              },
+              {
+                q: 'Cosa succede se la presale non raggiunge il target?',
+                a: 'Se non raggiungiamo almeno €75.000 (50% del target), tutti i fondi verranno rimborsati automaticamente.'
+              },
+              {
+                q: 'È sicuro? Come funziona il pagamento?',
+                a: 'Dopo la registrazione ricevi istruzioni via email. Puoi pagare con carta, crypto o bonifico. Fondi custoditi in smart contract verificato.'
+              },
+            ].map((faq, i) => (
+              <details key={i} className="group bg-white/5 hover:bg-white/10 rounded-xl overflow-hidden transition-all">
+                <summary className="cursor-pointer p-6 font-bold text-lg flex justify-between items-center">
+                  {faq.q}
+                  <span className="text-violet-400 group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <div className="px-6 pb-6 text-gray-400 leading-relaxed">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
           </div>
-        ) : (
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Contribution Form */}
-            <div className="bg-gray-800/50 rounded-2xl p-8 border border-gray-700">
-              <h2 className="text-2xl font-bold mb-6 text-white">Partecipa</h2>
+        </motion.div>
 
-              {/* Amount Input */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Importo (USDT)
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    min="500"
-                    step="1"
-                    className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white text-2xl font-bold"
-                    placeholder="500"
-                  />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                    USDT
-                  </div>
-                </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  Minimo: €500 | Massimo: €500
-                </p>
-              </div>
-
-              {/* Referral Code */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Codice Referral (opzionale)
-                </label>
-                <input
-                  type="text"
-                  value={referralCode}
-                  onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white"
-                  placeholder="FRP-XXXXX"
-                />
-              </div>
-
-              {/* Balance */}
-              {balance && (
-                <div className="mb-6 p-4 bg-black/30 rounded-lg">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Saldo USDT:</span>
-                    <span className="text-white font-semibold">
-                      {parseFloat(formatEther(balance.value)).toFixed(2)} USDT
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* What You Get */}
-              <div className="mb-6 p-4 bg-purple-900/20 rounded-lg border border-purple-500/30">
-                <h3 className="font-semibold text-white mb-3">Cosa Ricevi:</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Token base:</span>
-                    <span className="text-purple-400 font-semibold">
-                      {amount ? (parseFloat(amount) * 1000).toLocaleString() : '0'} FRP
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300">Bonus 20%:</span>
-                    <span className="text-green-400 font-semibold">
-                      +{amount ? (parseFloat(amount) * 200).toLocaleString() : '0'} FRP
-                    </span>
-                  </div>
-                  <div className="flex justify-between pt-2 border-t border-purple-500/30">
-                    <span className="text-white font-semibold">Totale:</span>
-                    <span className="text-yellow-400 font-bold text-lg">
-                      {amount ? (parseFloat(amount) * 1200).toLocaleString() : '0'} FRP
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <button
-                onClick={handleContribute}
-                disabled={isLoading || isConfirming || !amount || parseFloat(amount) < 500}
-                className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold text-white hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                {isLoading || isConfirming
-                  ? 'Elaborazione...'
-                  : isSuccess
-                  ? 'Completato!'
-                  : 'Partecipa alla Presale'}
-              </button>
-            </div>
-
-            {/* Info Sidebar */}
-            <div className="space-y-6">
-              <div className="bg-gray-800/50 rounded-2xl p-6 border border-gray-700">
-                <h3 className="text-xl font-bold mb-4 text-white">Info Presale</h3>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-400">•</span>
-                    <span>Prezzo: €0.001 per FRP</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-400">•</span>
-                    <span>Bonus: +20% per partecipanti</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-400">•</span>
-                    <span>Referral: +5% per ogni amico</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-400">•</span>
-                    <span>Pagamento: USDT (Polygon)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-400">•</span>
-                    <span>Token distribuiti al lancio</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-2xl p-6 border border-purple-500/30">
-                <h3 className="text-xl font-bold mb-4 text-white">Progresso</h3>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-gray-400">Raccolto</span>
-                      <span className="text-white font-semibold">
-                        €{presaleStats.totalRaised.toLocaleString()} / €150.000
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-3">
-                      <div
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all"
-                        style={{ width: `${Math.min((presaleStats.totalRaised / 150000) * 100, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-black/30 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Partecipanti</div>
-                      <div className="text-2xl font-bold text-white">{presaleStats.participants}</div>
-                    </div>
-                    <div className="bg-black/30 rounded-lg p-4">
-                      <div className="text-sm text-gray-400 mb-1">Obiettivo</div>
-                      <div className="text-2xl font-bold text-white">300</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Final CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mt-24 text-center"
+        >
+          <div className="inline-block px-8 py-3 bg-violet-950/50 border border-violet-500/30 rounded-full mb-6">
+            <span className="text-violet-400 font-medium">FREE THE PEOPLE. FREE THE FUTURE.</span>
           </div>
-        )}
+          
+          <p className="text-gray-500 max-w-2xl mx-auto">
+            Non investire più di quanto puoi permetterti di perdere • DYOR sempre • 
+            Le crypto sono investimenti ad alto rischio
+          </p>
+        </motion.div>
       </div>
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-6"
+            onClick={() => setShowSuccess(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-gradient-to-br from-green-950/90 to-emerald-900/80 border-2 border-green-500/50 rounded-3xl p-8 max-w-md text-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              
+              <h3 className="text-3xl font-black mb-3">Registrazione Completata!</h3>
+              <p className="text-gray-300 mb-6 leading-relaxed">
+                Controlla la tua email per le istruzioni di pagamento. Benvenuto tra i fondatori di Freepple! 🎉
+              </p>
+              
+              <button
+                onClick={() => setShowSuccess(false)}
+                className="px-8 py-3 bg-green-600 hover:bg-green-500 rounded-xl font-bold transition-all"
+              >
+                Chiudi
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
-
-export default function PresalePage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-gray-900">
-        <Navbar />
-        <div className="flex items-center justify-center min-h-[80vh] px-4">
-          <div className="text-white">Caricamento...</div>
-        </div>
-      </div>
-    }>
-      <PresaleContent />
-    </Suspense>
-  )
-}
-
