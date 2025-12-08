@@ -242,7 +242,7 @@ export default function PresalePage() {
 
               {/* Main CTA Button */}
               <Link
-                href="/register"
+                href="/auth/register"
                 className="block w-full py-5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 rounded-xl font-black text-lg text-center transition-all duration-300 shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-[1.02] active:scale-95"
               >
                 Registrati Ora →
