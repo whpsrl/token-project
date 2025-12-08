@@ -50,4 +50,79 @@ body {
   background: #6B21A8;
 }
 
+/* ============================================================================
+   FREEPPLE WHITEPAPER v4.0 - CSS ADDITIONS
+   ============================================================================ */
+
+/* Import JetBrains Mono font for terminal aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff00;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc00;
+}
+
+/* Custom selection color */
+::selection {
+  background: #00ff00;
+  color: #000;
+}
+
+::-moz-selection {
+  background: #00ff00;
+  color: #000;
+}
+
+/* Prevent text selection on interactive elements */
+button,
+a {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Animation utilities */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: #00ff00; }
+  50% { border-color: rgba(0, 255, 0, 0.3); }
+}
+
+/* Print styles */
+@media print {
+  nav, button, .fixed {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   END WHITEPAPER v4.0 STYLES
+   ============================================================================ */
 
