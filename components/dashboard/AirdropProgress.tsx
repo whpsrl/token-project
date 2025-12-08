@@ -7,7 +7,11 @@ import { getCurrentUser } from '@/lib/api/auth'
 import { getAirdropProgress, completeAirdropTask } from '@/lib/api/airdrop'
 import toast from 'react-hot-toast'
 
-export default function AirdropProgress() {
+interface AirdropProgressProps {
+  userId?: string
+}
+
+export default function AirdropProgress({ userId }: AirdropProgressProps) {
   const [tasks, setTasks] = useState<any[]>([])
   const [totalPoints, setTotalPoints] = useState(0)
   const [maxPoints] = useState(1000)
@@ -15,14 +19,18 @@ export default function AirdropProgress() {
 
   useEffect(() => {
     loadAirdropProgress()
-  }, [])
+  }, [userId])
 
   const loadAirdropProgress = async () => {
     try {
-      const user = await getCurrentUser()
-      if (!user) return
+      let currentUserId = userId
+      if (!currentUserId) {
+        const user = await getCurrentUser()
+        if (!user) return
+        currentUserId = user.id
+      }
 
-      const progress = await getAirdropProgress(user.id)
+      const progress = await getAirdropProgress(currentUserId)
       setTasks(progress.tasks)
       setTotalPoints(progress.totalPoints)
     } catch (error) {
@@ -34,10 +42,14 @@ export default function AirdropProgress() {
 
   const handleCompleteTask = async (taskType: string) => {
     try {
-      const user = await getCurrentUser()
-      if (!user) return
+      let currentUserId = userId
+      if (!currentUserId) {
+        const user = await getCurrentUser()
+        if (!user) return
+        currentUserId = user.id
+      }
 
-      await completeAirdropTask(user.id, taskType)
+      await completeAirdropTask(currentUserId, taskType)
       toast.success('Task completato!')
       loadAirdropProgress()
     } catch (error: any) {
