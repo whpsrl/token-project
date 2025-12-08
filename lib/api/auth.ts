@@ -43,6 +43,10 @@ export async function register(email: string, password: string, nome: string, co
     updated_at: userRaw.user_updated_at
   } : null
 
+  if (!user) {
+    throw new Error('Failed to create user profile')
+  }
+
   // Se ha referral code, crea record referral
   if (referralCode) {
     const { data: referrer } = await supabase
