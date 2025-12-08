@@ -190,10 +190,10 @@ BEGIN
         v_referral_code := p_referral_code;
     END IF;
     
-    -- Inserisci o aggiorna utente
+    -- Inserisci o aggiorna utente (usa constraint name per evitare ambiguità)
     INSERT INTO public.users (id, email, nome, cognome, referral_code, referred_by)
     VALUES (p_id, p_email, p_nome, p_cognome, v_referral_code, p_referred_by)
-    ON CONFLICT (id) DO UPDATE
+    ON CONFLICT ON CONSTRAINT users_pkey DO UPDATE
     SET 
         email = EXCLUDED.email,
         nome = COALESCE(EXCLUDED.nome, public.users.nome),
@@ -202,18 +202,18 @@ BEGIN
         referred_by = COALESCE(EXCLUDED.referred_by, public.users.referred_by),
         updated_at = NOW();
     
-    -- Ritorna il record
+    -- Ritorna il record (usa alias esplicito per evitare ambiguità)
     RETURN QUERY
     SELECT 
-        u.id, 
-        u.email, 
-        u.nome, 
-        u.cognome, 
-        u.wallet_address, 
-        u.referral_code, 
-        u.referred_by, 
-        u.created_at, 
-        u.updated_at
+        u.id AS id, 
+        u.email AS email, 
+        u.nome AS nome, 
+        u.cognome AS cognome, 
+        u.wallet_address AS wallet_address, 
+        u.referral_code AS referral_code, 
+        u.referred_by AS referred_by, 
+        u.created_at AS created_at, 
+        u.updated_at AS updated_at
     FROM public.users u
     WHERE u.id = p_id;
 END;
