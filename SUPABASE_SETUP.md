@@ -12,18 +12,25 @@
 
 ## 📊 Passo 2: Crea Database
 
-**IMPORTANTE**: Se hai già eseguito lo schema vecchio, devi eliminare le tabelle vecchie prima.
+### ⚡ Setup Completo (CONSIGLIATO)
+1. Vai su "SQL Editor" nel menu Supabase
+2. Copia tutto il contenuto da `supabase/setup-complete.sql`
+3. Incolla e clicca "Run"
+4. ✅ Questo script:
+   - Elimina tutto quello che esiste (tabelle, funzioni, trigger, policy)
+   - Ricrea tutto da zero in modo pulito
+   - Configura correttamente RLS e funzioni
+   - Verifica che tutto sia stato creato
 
-### Opzione A: Database nuovo (prima volta)
+⚠️ **ATTENZIONE**: Questo elimina TUTTE le tabelle esistenti! Usa solo se:
+- È un database nuovo, OPPURE
+- Non hai dati importanti da conservare
+
+### Opzione Alternativa: Schema Base
+Se preferisci creare solo le tabelle senza funzioni:
 1. Vai su "SQL Editor" nel menu Supabase
 2. Copia tutto il contenuto da `supabase/schema.sql`
 3. Incolla e clicca "Run"
-
-### Opzione B: Database esistente (migrazione)
-1. Vai su "SQL Editor" nel menu Supabase
-2. Copia tutto il contenuto da `supabase/full-migration.sql` (elimina vecchie tabelle e crea nuove)
-3. Incolla e clicca "Run"
-4. ⚠️ **ATTENZIONE**: Questo elimina tutte le tabelle vecchie! Usa solo se non hai dati importanti.
 
 ### Verifica
 Dopo l'esecuzione, verifica che tutte le tabelle siano state create:

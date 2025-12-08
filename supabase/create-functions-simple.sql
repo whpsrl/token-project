@@ -44,15 +44,15 @@ BEGIN
     END IF;
     
     -- Inserisci o aggiorna utente
-    INSERT INTO users (id, email, nome, cognome, referral_code, referred_by)
+    INSERT INTO public.users (id, email, nome, cognome, referral_code, referred_by)
     VALUES (p_id, p_email, p_nome, p_cognome, v_referral_code, p_referred_by)
     ON CONFLICT (id) DO UPDATE
     SET 
         email = EXCLUDED.email,
-        nome = COALESCE(EXCLUDED.nome, users.nome),
-        cognome = COALESCE(EXCLUDED.cognome, users.cognome),
-        referral_code = COALESCE(EXCLUDED.referral_code, users.referral_code),
-        referred_by = COALESCE(EXCLUDED.referred_by, users.referred_by),
+        nome = COALESCE(EXCLUDED.nome, public.users.nome),
+        cognome = COALESCE(EXCLUDED.cognome, public.users.cognome),
+        referral_code = COALESCE(EXCLUDED.referral_code, public.users.referral_code),
+        referred_by = COALESCE(EXCLUDED.referred_by, public.users.referred_by),
         updated_at = NOW();
     
     -- Ritorna il record inserito/aggiornato
@@ -67,7 +67,7 @@ BEGIN
         u.referred_by, 
         u.created_at, 
         u.updated_at
-    FROM users u
+    FROM public.users u
     WHERE u.id = p_id;
 END;
 $$;
@@ -93,9 +93,9 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 BEGIN
-    UPDATE users
+    UPDATE public.users
     SET wallet_address = p_wallet_address, updated_at = NOW()
-    WHERE users.id = p_user_id;
+    WHERE public.users.id = p_user_id;
     
     RETURN QUERY
     SELECT 
@@ -108,7 +108,7 @@ BEGIN
         u.referred_by, 
         u.created_at, 
         u.updated_at
-    FROM users u
+    FROM public.users u
     WHERE u.id = p_user_id;
 END;
 $$;
