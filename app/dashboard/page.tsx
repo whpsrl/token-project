@@ -3,14 +3,28 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useAccount } from 'wagmi'
+import { getCurrentUser } from '@/lib/api/auth'
+import { getReferralStats } from '@/lib/api/referral'
+import ReferralSection from '@/components/dashboard/ReferralSection'
+import PresaleStatus from '@/components/dashboard/PresaleStatus'
+import DashboardStats from '@/components/dashboard/DashboardStats'
+import AirdropProgress from '@/components/dashboard/AirdropProgress'
+import Navbar from '@/components/layout/Navbar'
 
 export default function DashboardPage() {
-  const [walletAddress, setWalletAddress] = useState<string | null>(null)
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [balance, setBalance] = useState(0)
-  const [copied, setCopied] = useState(false)
+  const { address, isConnected } = useAccount()
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [referralStats, setReferralStats] = useState({
+    level1: 0,
+    level2: 0,
+    total: 0,
+    totalEarned: 0,
+    rank: 'none'
+  })
 
-  // Stats personali (mock data)
+  // Stats personali
   const [userStats, setUserStats] = useState({
     frpBalance: 0,
     stakedAmount: 0,
@@ -22,100 +36,68 @@ export default function DashboardPage() {
     referralsToNextTier: 50
   })
 
-  // Connect Wallet
-  const connectWallet = async () => {
-    setIsConnecting(true)
-    
+  useEffect(() => {
+    if (isConnected && address) {
+      loadUserData()
+    } else {
+      setLoading(false)
+    }
+  }, [isConnected, address])
+
+  const loadUserData = async () => {
     try {
-      if (typeof window.ethereum !== 'undefined') {
-        // MetaMask/Wallet presente
-        const accounts = await window.ethereum.request({ 
-          method: 'eth_requestAccounts' 
+      setLoading(true)
+      const currentUser = await getCurrentUser()
+      if (currentUser) {
+        setUser(currentUser)
+        
+        // Carica statistiche referral
+        const stats = await getReferralStats(currentUser.id)
+        setReferralStats(stats)
+        
+        // Aggiorna userStats con dati reali
+        setUserStats({
+          frpBalance: 0, // Da caricare dal contratto
+          stakedAmount: 0,
+          stakingRewards: 0,
+          referrals: stats.total,
+          referralEarnings: stats.totalEarned,
+          tier: stats.rank === 'none' ? 'Bronze' : stats.rank.charAt(0).toUpperCase() + stats.rank.slice(1),
+          nextTier: getNextTier(stats.rank),
+          referralsToNextTier: getReferralsToNextTier(stats.rank, stats.level1, stats.level2)
         })
-        
-        const address = accounts[0]
-        setWalletAddress(address)
-        
-        // Verifica network (Polygon)
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' })
-        if (chainId !== '0x89') { // 0x89 = 137 = Polygon Mainnet
-          try {
-            await window.ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x89' }],
-            })
-          } catch (switchError: any) {
-            // Network non aggiunta, la aggiungiamo
-            if (switchError.code === 4902) {
-              await window.ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [{
-                  chainId: '0x89',
-                  chainName: 'Polygon Mainnet',
-                  nativeCurrency: {
-                    name: 'MATIC',
-                    symbol: 'MATIC',
-                    decimals: 18
-                  },
-                  rpcUrls: ['https://polygon-rpc.com/'],
-                  blockExplorerUrls: ['https://polygonscan.com/']
-                }]
-              })
-            }
-          }
-        }
-        
-        // Carica balance (mock per ora)
-        loadUserData(address)
-      } else {
-        alert('Installa MetaMask o un wallet compatibile!')
       }
     } catch (error) {
-      console.error('Errore connessione wallet:', error)
+      console.error('Error loading user data:', error)
     } finally {
-      setIsConnecting(false)
+      setLoading(false)
     }
   }
 
-  // Disconnect Wallet
-  const disconnectWallet = () => {
-    setWalletAddress(null)
-    setBalance(0)
-    setUserStats({
-      frpBalance: 0,
-      stakedAmount: 0,
-      stakingRewards: 0,
-      referrals: 0,
-      referralEarnings: 0,
-      tier: 'Bronze',
-      nextTier: 'Silver',
-      referralsToNextTier: 50
-    })
+  const getNextTier = (rank: string): string => {
+    const tiers = ['none', 'bronze', 'silver', 'gold', 'diamond', 'ambassador']
+    const currentIndex = tiers.indexOf(rank.toLowerCase())
+    if (currentIndex < tiers.length - 1) {
+      return tiers[currentIndex + 1].charAt(0).toUpperCase() + tiers[currentIndex + 1].slice(1)
+    }
+    return 'Max'
   }
 
-  // Carica dati utente (mock - da sostituire con chiamate reali)
-  const loadUserData = async (address: string) => {
-    // Simulazione caricamento dati
-    setTimeout(() => {
-      setUserStats({
-        frpBalance: 600000, // Token presale
-        stakedAmount: 0,
-        stakingRewards: 0,
-        referrals: 3,
-        referralEarnings: 18000, // 3% di 3 referral
-        tier: 'Bronze',
-        nextTier: 'Silver',
-        referralsToNextTier: 7
-      })
-    }, 1000)
-  }
-
-  // Copy referral link
-  const copyReferralLink = () => {
-    const referralLink = `https://freepple.xyz/presale?ref=${walletAddress?.slice(0, 8)}`
-    navigator.clipboard.writeText(referralLink)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const getReferralsToNextTier = (rank: string, level1: number, level2: number): number => {
+    const requirements: Record<string, { l1: number; l2: number }> = {
+      'none': { l1: 5, l2: 0 },
+      'bronze': { l1: 20, l2: 50 },
+      'silver': { l1: 50, l2: 150 },
+      'gold': { l1: 150, l2: 500 },
+      'diamond': { l1: 500, l2: 2000 }
+    }
+    
+    const next = requirements[rank.toLowerCase()]
+    if (!next) return 0
+    
+    const neededL1 = Math.max(0, next.l1 - level1)
+    const neededL2 = Math.max(0, next.l2 - level2)
+    return neededL1 + neededL2
   }
 
   // Formato indirizzo breve
@@ -132,42 +114,15 @@ export default function DashboardPage() {
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5" />
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-white/5 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-black">FREEPPLE</Link>
-          
-          <div className="flex items-center gap-4">
-            <Link href="/whitepaper" className="text-sm text-gray-400 hover:text-white transition-colors">Whitepaper</Link>
-            <Link href="/presale" className="text-sm text-gray-400 hover:text-white transition-colors">Presale</Link>
-            
-            {walletAddress ? (
-              <div className="flex items-center gap-3">
-                <div className="px-4 py-2 bg-violet-500/20 border border-violet-500/30 rounded-xl text-sm font-mono">
-                  {formatAddress(walletAddress)}
-                </div>
-                <button
-                  onClick={disconnectWallet}
-                  className="px-4 py-2 bg-red-500/20 border border-red-500/30 hover:bg-red-500/30 rounded-xl text-sm transition-all"
-                >
-                  Disconnetti
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={connectWallet}
-                disabled={isConnecting}
-                className="px-6 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 disabled:from-gray-600 disabled:to-gray-600 rounded-xl font-bold text-sm transition-all"
-              >
-                {isConnecting ? 'Connessione...' : 'Connetti Wallet'}
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
-        {!walletAddress ? (
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 pt-32">
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="w-12 h-12 border-2 border-violet-500/30 border-t-violet-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-gray-400">Caricamento...</p>
+          </div>
+        ) : !isConnected ? (
           /* Connect Wallet Screen */
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -187,51 +142,28 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <button
-              onClick={connectWallet}
-              disabled={isConnecting}
-              className="inline-flex items-center gap-3 px-12 py-5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-600 rounded-2xl font-black text-lg transition-all shadow-2xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105"
-            >
-              {isConnecting ? (
-                <>
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Connessione...</span>
-                </>
-              ) : (
-                <>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  <span>Connetti Wallet</span>
-                </>
-              )}
-            </button>
-
-            <div className="mt-12 p-6 bg-white/5 rounded-2xl">
-              <h3 className="font-bold mb-4">Wallet Supportati:</h3>
-              <div className="flex justify-center gap-6 text-gray-400">
-                <div className="text-center">
-                  <div className="text-3xl mb-2">🦊</div>
-                  <div className="text-sm">MetaMask</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl mb-2">👛</div>
-                  <div className="text-sm">WalletConnect</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl mb-2">🌈</div>
-                  <div className="text-sm">Rainbow</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl mb-2">⚡</div>
-                  <div className="text-sm">Trust Wallet</div>
-                </div>
-              </div>
-            </div>
-
             <p className="mt-8 text-sm text-gray-500">
-              Assicurati di essere connesso alla rete <span className="text-violet-400 font-bold">Polygon Mainnet</span>
+              Usa il pulsante "Connetti Wallet" in alto a destra
             </p>
+          </motion.div>
+        ) : !user ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-2xl mx-auto text-center"
+          >
+            <div className="mb-8">
+              <h1 className="text-5xl font-black mb-4">Registrazione Richiesta</h1>
+              <p className="text-xl text-gray-400 mb-8">
+                Devi registrarti per accedere alla dashboard
+              </p>
+              <Link
+                href="/auth/register"
+                className="inline-flex items-center gap-3 px-12 py-5 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 rounded-2xl font-black text-lg transition-all shadow-2xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:scale-105"
+              >
+                Registrati Ora
+              </Link>
+            </div>
           </motion.div>
         ) : (
           /* Dashboard Content */
@@ -242,15 +174,21 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
             >
               <h1 className="text-4xl md:text-5xl font-black mb-2">
-                Benvenuto, <span className="text-violet-400">Fondatore</span>
+                Benvenuto, <span className="text-violet-400">{user.nome || 'Fondatore'}</span>
               </h1>
               <p className="text-gray-400">
                 Gestisci i tuoi FRP, staking e referral da qui
               </p>
             </motion.div>
 
+            {/* Presale Status */}
+            <PresaleStatus />
+
             {/* Stats Grid */}
-            <div className="grid md:grid-cols-3 gap-6">
+            <DashboardStats userStats={userStats} />
+
+            {/* Airdrop Progress */}
+            <AirdropProgress userId={user.id} />
               {/* Balance Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -315,68 +253,8 @@ export default function DashboardPage() {
               </motion.div>
             </div>
 
-            {/* Referral Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-gradient-to-br from-violet-950/30 to-fuchsia-950/20 border border-violet-500/20 rounded-3xl p-8"
-            >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-                <div>
-                  <h2 className="text-3xl font-black mb-2">Programma Referral</h2>
-                  <p className="text-gray-400">
-                    Invita amici e guadagna <span className="text-violet-400 font-bold">3% + 1%</span> su ogni acquisto
-                  </p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/20 border border-violet-500/30 rounded-full mb-2">
-                    <span className="text-2xl">🏆</span>
-                    <span className="font-bold">{userStats.tier}</span>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {userStats.referralsToNextTier} referral a {userStats.nextTier}
-                  </div>
-                </div>
-              </div>
-
-              {/* Referral Link */}
-              <div className="bg-black/30 rounded-2xl p-6">
-                <label className="block text-sm font-medium text-gray-400 mb-3">
-                  Il Tuo Link Referral:
-                </label>
-                <div className="flex gap-3">
-                  <input
-                    type="text"
-                    value={`https://freepple.xyz/presale?ref=${walletAddress.slice(0, 8)}`}
-                    readOnly
-                    className="flex-1 px-4 py-3 bg-black/50 border border-violet-500/30 rounded-xl font-mono text-sm text-gray-300"
-                  />
-                  <button
-                    onClick={copyReferralLink}
-                    className="px-6 py-3 bg-violet-600 hover:bg-violet-500 rounded-xl font-bold transition-all"
-                  >
-                    {copied ? '✓ Copiato!' : 'Copia'}
-                  </button>
-                </div>
-                
-                <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[
-                    { icon: '💰', label: 'Livello 1', value: '3%' },
-                    { icon: '🎁', label: 'Livello 2', value: '1%' },
-                    { icon: '👥', label: 'Invitati', value: userStats.referrals },
-                    { icon: '💎', label: 'Guadagnati', value: `${userStats.referralEarnings.toLocaleString()} FRP` },
-                  ].map((stat, i) => (
-                    <div key={i} className="text-center p-3 bg-violet-500/10 rounded-xl">
-                      <div className="text-2xl mb-1">{stat.icon}</div>
-                      <div className="text-xs text-gray-500 mb-1">{stat.label}</div>
-                      <div className="font-bold text-violet-400">{stat.value}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+            {/* Referral Section - Gestione Completa Affiliati */}
+            <ReferralSection />
 
             {/* Staking Section */}
             <motion.div

@@ -28,7 +28,7 @@ export default function ReferralSection() {
       if (!user) return
 
       setReferralCode(user.referral_code)
-      setReferralLink(`${window.location.origin}/auth/register?ref=${user.referral_code}`)
+      setReferralLink(`${window.location.origin}/presale?ref=${user.referral_code}`)
 
       const referralStats = await getReferralStats(user.id)
       setStats({
@@ -143,7 +143,7 @@ export default function ReferralSection() {
       </div>
 
       {/* Commissioni */}
-      <div className="bg-purple-900/20 rounded-lg p-4 border border-purple-500/30">
+      <div className="bg-purple-900/20 rounded-lg p-4 border border-purple-500/30 mb-6">
         <h3 className="font-semibold text-white mb-2">Commissioni</h3>
         <div className="space-y-2 text-sm text-gray-300">
           <div className="flex justify-between">
@@ -156,6 +156,73 @@ export default function ReferralSection() {
           </div>
         </div>
       </div>
+
+      {/* Sistema Rank */}
+      <div className="bg-gradient-to-br from-yellow-900/20 to-orange-900/20 rounded-lg p-6 border border-yellow-500/30 mb-6">
+        <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
+          <span className="text-2xl">🏆</span>
+          Sistema Rank
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+          {[
+            { name: 'Bronze', req: '5 L1', icon: '🥉' },
+            { name: 'Silver', req: '20 L1 + 50 L2', icon: '🥈' },
+            { name: 'Gold', req: '50 L1 + 150 L2', icon: '🥇' },
+            { name: 'Diamond', req: '150 L1 + 500 L2', icon: '💎' },
+            { name: 'Ambassador', req: '500 L1 + 2000 L2', icon: '👑' },
+          ].map((tier, i) => (
+            <div
+              key={i}
+              className={`p-3 rounded-lg border ${
+                stats.rank.toLowerCase() === tier.name.toLowerCase()
+                  ? 'bg-yellow-500/20 border-yellow-500/50'
+                  : 'bg-black/30 border-gray-700'
+              }`}
+            >
+              <div className="text-xl mb-1">{tier.icon}</div>
+              <div className="font-bold text-white mb-1">{tier.name}</div>
+              <div className="text-gray-400 text-[10px]">{tier.req}</div>
+            </div>
+          ))}
+        </div>
+        {stats.rank !== 'none' && (
+          <div className="mt-4 p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/30">
+            <div className="text-sm text-gray-300">
+              Il tuo rank attuale: <span className="font-bold text-yellow-400 capitalize">{stats.rank}</span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Ricevi bonus dalla pool rank (30% delle sell tax)
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Lista Referral */}
+      {stats.total > 0 && (
+        <div className="bg-black/30 rounded-lg p-6 border border-gray-700">
+          <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
+            <FaUsers className="text-purple-400" />
+            I Tuoi Referral ({stats.total})
+          </h3>
+          <div className="space-y-3">
+            <div className="text-sm text-gray-400 mb-2">
+              I tuoi referral di livello 1: <span className="text-white font-bold">{stats.level1}</span>
+            </div>
+            <div className="text-sm text-gray-400 mb-4">
+              I tuoi referral di livello 2: <span className="text-white font-bold">{stats.level2}</span>
+            </div>
+            <div className="p-4 bg-purple-900/10 rounded-lg border border-purple-500/20">
+              <div className="text-xs text-gray-400 mb-2">Guadagni Totali</div>
+              <div className="text-2xl font-bold text-purple-400">
+                {stats.totalEarned.toLocaleString()} FRP
+              </div>
+              <div className="text-xs text-gray-500 mt-1">
+                ≈ €{(stats.totalEarned * 0.001).toFixed(2)}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   )
 }
