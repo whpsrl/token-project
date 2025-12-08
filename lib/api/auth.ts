@@ -16,16 +16,19 @@ export async function register(email: string, password: string, nome: string, co
   const { data: userData, error: userError } = await supabase.rpc('create_user_profile', {
     p_id: authData.user!.id,
     p_email: email,
-    p_nome: nome,
-    p_cognome: cognome,
+    p_nome: nome || null,
+    p_cognome: cognome || null,
     p_referral_code: userReferralCode,
     p_referred_by: referralCode || null,
   })
 
-  if (userError) throw userError
+  if (userError) {
+    console.error('Error creating user profile:', userError)
+    throw userError
+  }
   
-  // La funzione restituisce un oggetto, non un array
-  const user = Array.isArray(userData) ? userData[0] : userData
+  // La funzione restituisce un array con un oggetto
+  const user = Array.isArray(userData) && userData.length > 0 ? userData[0] : userData
 
   // Se ha referral code, crea record referral
   if (referralCode) {
@@ -83,9 +86,12 @@ export async function updateWalletAddress(userId: string, walletAddress: string)
     p_wallet_address: walletAddress,
   })
 
-  if (error) throw error
+  if (error) {
+    console.error('Error updating wallet:', error)
+    throw error
+  }
   
-  // La funzione restituisce un oggetto, non un array
-  return Array.isArray(data) ? data[0] : data
+  // La funzione restituisce un array con un oggetto
+  return Array.isArray(data) && data.length > 0 ? data[0] : data
 }
 
