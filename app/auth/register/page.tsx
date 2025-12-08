@@ -45,6 +45,10 @@ export default function RegisterPage() {
     }
   }, [])
 
+  // Verifica se reCAPTCHA è configurato
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+  const hasRecaptcha = recaptchaSiteKey && recaptchaSiteKey !== ''
+
   // reCAPTCHA ready
   const handleCaptchaLoad = () => {
     setCaptchaReady(true)
@@ -128,13 +132,18 @@ export default function RegisterPage() {
     setErrors({})
 
     try {
-      // ANTIBOT: Get reCAPTCHA token
-      if (typeof window !== 'undefined' && window.grecaptcha && captchaReady) {
-        const token = await window.grecaptcha.execute(
-          process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
-          { action: 'submit_registration' }
-        )
-        setCaptchaToken(token)
+      // ANTIBOT: Get reCAPTCHA token (opzionale)
+      if (hasRecaptcha && typeof window !== 'undefined' && window.grecaptcha && captchaReady && recaptchaSiteKey) {
+        try {
+          const token = await window.grecaptcha.execute(
+            recaptchaSiteKey,
+            { action: 'submit_registration' }
+          )
+          setCaptchaToken(token)
+        } catch (recaptchaError) {
+          console.warn('reCAPTCHA error (continuing anyway):', recaptchaError)
+          // Continua senza reCAPTCHA se c'è un errore
+        }
       }
 
       // Registra utente
@@ -167,11 +176,17 @@ export default function RegisterPage() {
 
   return (
     <>
-      {/* Google reCAPTCHA v3 */}
-      <Script
-        src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-        onLoad={handleCaptchaLoad}
-      />
+      {/* Google reCAPTCHA v3 (opzionale) */}
+      {hasRecaptcha && recaptchaSiteKey && (
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
+          onLoad={handleCaptchaLoad}
+          onError={() => {
+            console.warn('reCAPTCHA script failed to load')
+            setCaptchaReady(false)
+          }}
+        />
+      )}
 
       <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
         {/* Background Effects */}
@@ -403,23 +418,25 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {/* reCAPTCHA notice */}
-              <div className="text-xs text-gray-600 text-center">
-                Questo sito è protetto da reCAPTCHA e si applicano la{' '}
-                <a href="https://policies.google.com/privacy" className="text-violet-400 hover:underline" target="_blank" rel="noopener noreferrer">
-                  Privacy Policy
-                </a>
-                {' '}e i{' '}
-                <a href="https://policies.google.com/terms" className="text-violet-400 hover:underline" target="_blank" rel="noopener noreferrer">
-                  Termini di Servizio
-                </a>
-                {' '}di Google.
-              </div>
+              {/* reCAPTCHA notice (solo se configurato) */}
+              {hasRecaptcha && (
+                <div className="text-xs text-gray-600 text-center">
+                  Questo sito è protetto da reCAPTCHA e si applicano la{' '}
+                  <a href="https://policies.google.com/privacy" className="text-violet-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                    Privacy Policy
+                  </a>
+                  {' '}e i{' '}
+                  <a href="https://policies.google.com/terms" className="text-violet-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                    Termini di Servizio
+                  </a>
+                  {' '}di Google.
+                </div>
+              )}
 
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting || !captchaReady}
+                disabled={isSubmitting || (hasRecaptcha && !captchaReady)}
                 className="w-full px-12 py-4 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-purple-600 hover:from-violet-500 hover:via-fuchsia-400 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed rounded-xl font-black text-lg transition-all shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50"
               >
                 {isSubmitting ? (
