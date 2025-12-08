@@ -202,18 +202,18 @@ BEGIN
         referred_by = COALESCE(EXCLUDED.referred_by, public.users.referred_by),
         updated_at = NOW();
     
-    -- Ritorna il record (usa alias esplicito per evitare ambiguità)
+    -- Ritorna il record con nomi colonne diversi per evitare ambiguità
     RETURN QUERY
     SELECT 
-        u.id AS id, 
-        u.email AS email, 
-        u.nome AS nome, 
-        u.cognome AS cognome, 
-        u.wallet_address AS wallet_address, 
-        u.referral_code AS referral_code, 
-        u.referred_by AS referred_by, 
-        u.created_at AS created_at, 
-        u.updated_at AS updated_at
+        u.id AS user_id, 
+        u.email AS user_email, 
+        u.nome AS user_nome, 
+        u.cognome AS user_cognome, 
+        u.wallet_address AS user_wallet_address, 
+        u.referral_code AS user_referral_code, 
+        u.referred_by AS user_referred_by, 
+        u.created_at AS user_created_at, 
+        u.updated_at AS user_updated_at
     FROM public.users u
     WHERE u.id = p_id;
 END;
@@ -225,15 +225,15 @@ CREATE OR REPLACE FUNCTION update_user_wallet(
     p_wallet_address VARCHAR
 )
 RETURNS TABLE (
-    id UUID,
-    email VARCHAR,
-    nome VARCHAR,
-    cognome VARCHAR,
-    wallet_address VARCHAR,
-    referral_code VARCHAR,
-    referred_by VARCHAR,
-    created_at TIMESTAMPTZ,
-    updated_at TIMESTAMPTZ
+    user_id UUID,
+    user_email VARCHAR,
+    user_nome VARCHAR,
+    user_cognome VARCHAR,
+    user_wallet_address VARCHAR,
+    user_referral_code VARCHAR,
+    user_referred_by VARCHAR,
+    user_created_at TIMESTAMPTZ,
+    user_updated_at TIMESTAMPTZ
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -245,15 +245,15 @@ BEGIN
     
     RETURN QUERY
     SELECT 
-        u.id, 
-        u.email, 
-        u.nome, 
-        u.cognome, 
-        u.wallet_address, 
-        u.referral_code, 
-        u.referred_by, 
-        u.created_at, 
-        u.updated_at
+        u.id AS user_id, 
+        u.email AS user_email, 
+        u.nome AS user_nome, 
+        u.cognome AS user_cognome, 
+        u.wallet_address AS user_wallet_address, 
+        u.referral_code AS user_referral_code, 
+        u.referred_by AS user_referred_by, 
+        u.created_at AS user_created_at, 
+        u.updated_at AS user_updated_at
     FROM public.users u
     WHERE u.id = p_user_id;
 END;

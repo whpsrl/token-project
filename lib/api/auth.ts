@@ -28,7 +28,20 @@ export async function register(email: string, password: string, nome: string, co
   }
   
   // La funzione restituisce un array con un oggetto
-  const user = Array.isArray(userData) && userData.length > 0 ? userData[0] : userData
+  const userRaw = Array.isArray(userData) && userData.length > 0 ? userData[0] : userData
+  
+  // Mappa i nomi delle colonne (user_id -> id, ecc.)
+  const user = userRaw ? {
+    id: userRaw.user_id,
+    email: userRaw.user_email,
+    nome: userRaw.user_nome,
+    cognome: userRaw.user_cognome,
+    wallet_address: userRaw.user_wallet_address,
+    referral_code: userRaw.user_referral_code,
+    referred_by: userRaw.user_referred_by,
+    created_at: userRaw.user_created_at,
+    updated_at: userRaw.user_updated_at
+  } : null
 
   // Se ha referral code, crea record referral
   if (referralCode) {
@@ -92,6 +105,19 @@ export async function updateWalletAddress(userId: string, walletAddress: string)
   }
   
   // La funzione restituisce un array con un oggetto
-  return Array.isArray(data) && data.length > 0 ? data[0] : data
+  const userRaw = Array.isArray(data) && data.length > 0 ? data[0] : data
+  
+  // Mappa i nomi delle colonne (user_id -> id, ecc.)
+  return userRaw ? {
+    id: userRaw.user_id,
+    email: userRaw.user_email,
+    nome: userRaw.user_nome,
+    cognome: userRaw.user_cognome,
+    wallet_address: userRaw.user_wallet_address,
+    referral_code: userRaw.user_referral_code,
+    referred_by: userRaw.user_referred_by,
+    created_at: userRaw.user_created_at,
+    updated_at: userRaw.user_updated_at
+  } : null
 }
 
