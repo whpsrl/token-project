@@ -189,69 +189,6 @@ export default function DashboardPage() {
 
             {/* Airdrop Progress */}
             <AirdropProgress userId={user.id} />
-              {/* Balance Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-gradient-to-br from-violet-950/50 to-violet-900/30 border border-violet-500/30 rounded-2xl p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm text-gray-400 font-medium">FRP Balance</h3>
-                  <div className="w-10 h-10 bg-violet-500/20 rounded-full flex items-center justify-center">
-                    <span className="text-xl">💎</span>
-                  </div>
-                </div>
-                <div className="text-3xl font-black text-violet-400 mb-2">
-                  {userStats.frpBalance.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500">
-                  ≈ €{(userStats.frpBalance * 0.001).toLocaleString()}
-                </div>
-              </motion.div>
-
-              {/* Staking Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-gradient-to-br from-fuchsia-950/50 to-fuchsia-900/30 border border-fuchsia-500/30 rounded-2xl p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm text-gray-400 font-medium">In Staking</h3>
-                  <div className="w-10 h-10 bg-fuchsia-500/20 rounded-full flex items-center justify-center">
-                    <span className="text-xl">🔒</span>
-                  </div>
-                </div>
-                <div className="text-3xl font-black text-fuchsia-400 mb-2">
-                  {userStats.stakedAmount.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500">
-                  Rewards: {userStats.stakingRewards.toLocaleString()} FRP
-                </div>
-              </motion.div>
-
-              {/* Referral Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="bg-gradient-to-br from-green-950/50 to-green-900/30 border border-green-500/30 rounded-2xl p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm text-gray-400 font-medium">Referral Earnings</h3>
-                  <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
-                    <span className="text-xl">🎁</span>
-                  </div>
-                </div>
-                <div className="text-3xl font-black text-green-400 mb-2">
-                  {userStats.referralEarnings.toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {userStats.referrals} amici invitati
-                </div>
-              </motion.div>
-            </div>
 
             {/* Referral Section - Gestione Completa Affiliati */}
             <ReferralSection />
@@ -317,8 +254,9 @@ export default function DashboardPage() {
                 <p className="text-sm text-gray-500">Presale ancora aperta</p>
               </Link>
 
+              {address && (
               <a
-                href={`https://polygonscan.com/address/${walletAddress}`}
+                href={`https://polygonscan.com/address/${address}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-6 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all group"
@@ -327,6 +265,7 @@ export default function DashboardPage() {
                 <h3 className="font-bold mb-2 group-hover:text-violet-400 transition-colors">Vedi su PolygonScan</h3>
                 <p className="text-sm text-gray-500">Esplora transazioni</p>
               </a>
+              )}
 
               <Link
                 href="/whitepaper"
