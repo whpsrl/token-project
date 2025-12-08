@@ -77,4 +77,15 @@ export async function getCurrentUser(): Promise<User | null> {
   return data
 }
 
+export async function updateWalletAddress(userId: string, walletAddress: string) {
+  const { data, error } = await supabase
+    .from('users')
+    .update({ wallet_address: walletAddress })
+    .eq('id', userId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
 

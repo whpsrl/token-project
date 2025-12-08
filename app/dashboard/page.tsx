@@ -10,6 +10,7 @@ import ReferralSection from '@/components/dashboard/ReferralSection'
 import PresaleStatus from '@/components/dashboard/PresaleStatus'
 import DashboardStats from '@/components/dashboard/DashboardStats'
 import AirdropProgress from '@/components/dashboard/AirdropProgress'
+import WalletTutorial from '@/components/dashboard/WalletTutorial'
 import Navbar from '@/components/layout/Navbar'
 
 export default function DashboardPage() {
@@ -180,6 +181,13 @@ export default function DashboardPage() {
                 Gestisci i tuoi FRP, staking e referral da qui
               </p>
             </motion.div>
+
+            {/* Wallet Tutorial - Mostra se non ha wallet salvato */}
+            <WalletTutorial 
+              userId={user.id} 
+              currentWalletAddress={user.wallet_address}
+              onWalletUpdated={loadUserData}
+            />
 
             {/* Presale Status */}
             <PresaleStatus />
