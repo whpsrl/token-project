@@ -164,15 +164,15 @@ CREATE OR REPLACE FUNCTION create_user_profile(
     p_referred_by VARCHAR DEFAULT NULL
 )
 RETURNS TABLE (
-    id UUID,
-    email VARCHAR,
-    nome VARCHAR,
-    cognome VARCHAR,
-    wallet_address VARCHAR,
-    referral_code VARCHAR,
-    referred_by VARCHAR,
-    created_at TIMESTAMPTZ,
-    updated_at TIMESTAMPTZ
+    user_id UUID,
+    user_email VARCHAR,
+    user_nome VARCHAR,
+    user_cognome VARCHAR,
+    user_wallet_address VARCHAR,
+    user_referral_code VARCHAR,
+    user_referred_by VARCHAR,
+    user_created_at TIMESTAMPTZ,
+    user_updated_at TIMESTAMPTZ
 ) 
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -206,17 +206,23 @@ BEGIN
         RAISE EXCEPTION 'User with id % does not exist in auth.users after retries', p_id;
     END IF;
     
-    -- Inserisci o aggiorna utente
-    INSERT INTO public.users (id, email, nome, cognome, referral_code, referred_by)
-    VALUES (p_id, p_email, p_nome, p_cognome, v_referral_code, p_referred_by)
-    ON CONFLICT ON CONSTRAINT users_pkey DO UPDATE
-    SET 
-        email = EXCLUDED.email,
-        nome = COALESCE(EXCLUDED.nome, public.users.nome),
-        cognome = COALESCE(EXCLUDED.cognome, public.users.cognome),
-        referral_code = COALESCE(EXCLUDED.referral_code, public.users.referral_code),
-        referred_by = COALESCE(EXCLUDED.referred_by, public.users.referred_by),
-        updated_at = NOW();
+    -- Inserisci o aggiorna utente (evita ON CONFLICT per eliminare ambiguità)
+    IF EXISTS (SELECT 1 FROM public.users WHERE public.users.id = p_id) THEN
+        -- Aggiorna record esistente
+        UPDATE public.users
+        SET 
+            email = p_email,
+            nome = COALESCE(p_nome, public.users.nome),
+            cognome = COALESCE(p_cognome, public.users.cognome),
+            referral_code = COALESCE(v_referral_code, public.users.referral_code),
+            referred_by = COALESCE(p_referred_by, public.users.referred_by),
+            updated_at = NOW()
+        WHERE public.users.id = p_id;
+    ELSE
+        -- Inserisci nuovo record
+        INSERT INTO public.users (id, email, nome, cognome, referral_code, referred_by)
+        VALUES (p_id, p_email, p_nome, p_cognome, v_referral_code, p_referred_by);
+    END IF;
     
     -- Ritorna il record con nomi colonne diversi per evitare ambiguità
     RETURN QUERY
