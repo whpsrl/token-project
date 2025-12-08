@@ -47,7 +47,7 @@ export default function RegisterPage() {
 
   // Verifica se reCAPTCHA è configurato
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-  const hasRecaptcha = recaptchaSiteKey && recaptchaSiteKey !== ''
+  const hasRecaptcha = Boolean(recaptchaSiteKey && recaptchaSiteKey !== '')
 
   // reCAPTCHA ready
   const handleCaptchaLoad = () => {
