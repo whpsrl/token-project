@@ -198,11 +198,11 @@ export default function ReferralSection() {
       </div>
 
       {/* Lista Referral */}
-      {stats.total > 0 && (
+      {stats.totalReferrals > 0 && (
         <div className="bg-black/30 rounded-lg p-6 border border-gray-700">
           <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
             <FaUsers className="text-purple-400" />
-            I Tuoi Referral ({stats.total})
+            I Tuoi Referral ({stats.totalReferrals})
           </h3>
           <div className="space-y-3">
             <div className="text-sm text-gray-400 mb-2">
