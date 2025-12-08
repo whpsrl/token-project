@@ -206,6 +206,12 @@ CREATE POLICY "Service role can do anything on airdrop_tasks"
     ON airdrop_tasks FOR ALL
     USING (auth.role() = 'service_role');
 
+-- Policy: Utenti autenticati possono inserire il proprio record durante la registrazione
+DROP POLICY IF EXISTS "Users can insert own data" ON users;
+CREATE POLICY "Users can insert own data"
+    ON users FOR INSERT
+    WITH CHECK (auth.uid() = id);
+
 -- Policy: Utenti autenticati possono vedere solo i propri dati
 DROP POLICY IF EXISTS "Users can view own data" ON users;
 CREATE POLICY "Users can view own data"
@@ -297,6 +303,40 @@ CREATE TRIGGER update_rank_on_referral
     AFTER INSERT OR UPDATE ON referrals
     FOR EACH ROW
     EXECUTE FUNCTION update_user_rank();
+
+-- ============================================================================
+-- TRIGGER: Crea automaticamente record in users quando viene creato in auth.users
+-- Backup nel caso la policy RLS non funzioni durante la registrazione
+-- ============================================================================
+
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    user_referral_code VARCHAR(50);
+BEGIN
+    -- Genera referral code unico
+    user_referral_code := 'FRP-' || UPPER(SUBSTRING(MD5(RANDOM()::TEXT) FROM 1 FOR 9));
+    
+    -- Assicurati che sia unico
+    WHILE EXISTS (SELECT 1 FROM users WHERE referral_code = user_referral_code) LOOP
+        user_referral_code := 'FRP-' || UPPER(SUBSTRING(MD5(RANDOM()::TEXT) FROM 1 FOR 9));
+    END LOOP;
+    
+    -- Inserisci nella tabella users solo se non esiste già
+    INSERT INTO public.users (id, email, referral_code)
+    VALUES (NEW.id, NEW.email, user_referral_code)
+    ON CONFLICT (id) DO NOTHING;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Crea trigger (solo se non esiste già)
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION handle_new_user();
 
 -- ============================================================================
 -- VERIFICA TABELLE
