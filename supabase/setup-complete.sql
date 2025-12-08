@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS users CASCADE;
 
 -- Tabella users
 CREATE TABLE users (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     nome VARCHAR(100),
     cognome VARCHAR(100),
@@ -62,6 +62,8 @@ CREATE TABLE users (
     referred_by VARCHAR(50),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    -- Foreign key rimosso: gestito a livello applicativo nella funzione create_user_profile
+    -- Il controllo viene fatto verificando che l'utente esista in auth.users prima di inserire
 );
 
 CREATE INDEX idx_users_email ON users(email);
@@ -177,7 +179,8 @@ SECURITY DEFINER
 AS $$
 DECLARE
     v_referral_code VARCHAR(50);
-    v_user_record RECORD;
+    auth_user_exists BOOLEAN := false;
+    retry_count INTEGER := 0;
 BEGIN
     -- Genera referral code se non fornito
     IF p_referral_code IS NULL THEN
@@ -190,7 +193,20 @@ BEGIN
         v_referral_code := p_referral_code;
     END IF;
     
-    -- Inserisci o aggiorna utente (usa constraint name per evitare ambiguità)
+    -- Verifica che l'utente esista in auth.users (con retry per timing)
+    WHILE NOT auth_user_exists AND retry_count < 5 LOOP
+        SELECT EXISTS(SELECT 1 FROM auth.users WHERE id = p_id) INTO auth_user_exists;
+        IF NOT auth_user_exists THEN
+            PERFORM pg_sleep(0.1); -- Aspetta 100ms
+            retry_count := retry_count + 1;
+        END IF;
+    END LOOP;
+    
+    IF NOT auth_user_exists THEN
+        RAISE EXCEPTION 'User with id % does not exist in auth.users after retries', p_id;
+    END IF;
+    
+    -- Inserisci o aggiorna utente
     INSERT INTO public.users (id, email, nome, cognome, referral_code, referred_by)
     VALUES (p_id, p_email, p_nome, p_cognome, v_referral_code, p_referred_by)
     ON CONFLICT ON CONSTRAINT users_pkey DO UPDATE

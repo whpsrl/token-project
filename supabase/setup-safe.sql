@@ -9,7 +9,7 @@
 
 -- Tabella users
 CREATE TABLE IF NOT EXISTS users (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     nome VARCHAR(100),
     cognome VARCHAR(100),
@@ -19,6 +19,10 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Rimuovi foreign key constraint se esiste (causa problemi di timing)
+-- Il controllo viene fatto a livello applicativo nella funzione create_user_profile
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_id_fkey;
 
 -- Crea indici solo se non esistono
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
@@ -134,6 +138,8 @@ SECURITY DEFINER
 AS $$
 DECLARE
     v_referral_code VARCHAR(50);
+    auth_user_exists BOOLEAN := false;
+    retry_count INTEGER := 0;
 BEGIN
     -- Genera referral code se non fornito
     IF p_referral_code IS NULL THEN
@@ -144,6 +150,19 @@ BEGIN
         END LOOP;
     ELSE
         v_referral_code := p_referral_code;
+    END IF;
+    
+    -- Verifica che l'utente esista in auth.users (con retry per timing)
+    WHILE NOT auth_user_exists AND retry_count < 5 LOOP
+        SELECT EXISTS(SELECT 1 FROM auth.users WHERE id = p_id) INTO auth_user_exists;
+        IF NOT auth_user_exists THEN
+            PERFORM pg_sleep(0.1); -- Aspetta 100ms
+            retry_count := retry_count + 1;
+        END IF;
+    END LOOP;
+    
+    IF NOT auth_user_exists THEN
+        RAISE EXCEPTION 'User with id % does not exist in auth.users after retries', p_id;
     END IF;
     
     -- Inserisci o aggiorna utente
