@@ -12,21 +12,20 @@ export async function register(email: string, password: string, nome: string, co
 
   if (authError) throw authError
 
-  // Crea record in tabella users
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .insert({
-      id: authData.user!.id,
-      email,
-      nome,
-      cognome,
-      referral_code: userReferralCode,
-      referred_by: referralCode || null,
-    })
-    .select()
-    .single()
+  // Crea record in tabella users usando funzione SECURITY DEFINER (bypassa RLS)
+  const { data: userData, error: userError } = await supabase.rpc('create_user_profile', {
+    p_id: authData.user!.id,
+    p_email: email,
+    p_nome: nome,
+    p_cognome: cognome,
+    p_referral_code: userReferralCode,
+    p_referred_by: referralCode || null,
+  })
 
   if (userError) throw userError
+  
+  // La funzione restituisce un oggetto, non un array
+  const user = Array.isArray(userData) ? userData[0] : userData
 
   // Se ha referral code, crea record referral
   if (referralCode) {
@@ -39,13 +38,13 @@ export async function register(email: string, password: string, nome: string, co
     if (referrer) {
       await supabase.from('referrals').insert({
         referrer_id: referrer.id,
-        referred_id: userData.id,
+        referred_id: user.id,
         level: 1,
       })
     }
   }
 
-  return userData
+  return user
 }
 
 export async function login(email: string, password: string) {
@@ -78,14 +77,15 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function updateWalletAddress(userId: string, walletAddress: string) {
-  const { data, error } = await supabase
-    .from('users')
-    .update({ wallet_address: walletAddress })
-    .eq('id', userId)
-    .select()
-    .single()
+  // Usa funzione SECURITY DEFINER per bypassare RLS
+  const { data, error } = await supabase.rpc('update_user_wallet', {
+    p_user_id: userId,
+    p_wallet_address: walletAddress,
+  })
 
   if (error) throw error
-  return data
+  
+  // La funzione restituisce un oggetto, non un array
+  return Array.isArray(data) ? data[0] : data
 }
 
